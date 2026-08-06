@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>투자 리밸런싱 체커</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>투자 리밸런싱 체커</h1>
+      <p>매달 마지막날 시장 현황을 점검하고 전략별 목표배분에 맞춰 리밸런싱 제안을 확인합니다. (해외주식 기준, 매매는 직접 실행)</p>
+    </header>
+
+    <div class="card" id="github-panel">
+      <h2>GitHub 연결</h2>
+      <p class="muted">종목을 추가·수정하면 이 저장소(<span id="repo-name"></span>)에 직접 커밋됩니다. 이 저장소에 대해 Contents 쓰기 권한만 가진 fine-grained PAT를 입력하세요.</p>
+      <div class="form-row">
+        <input type="password" id="pat-input" placeholder="GitHub Personal Access Token" />
+        <button class="primary" id="pat-save">저장</button>
+        <button class="secondary" id="pat-clear">연결 해제</button>
+      </div>
+      <div class="token-status" id="pat-status">연결 안 됨</div>
+    </div>
+
+    <nav class="tabs">
+      <button class="tab-button active" data-tab="dual_momentum">① 듀얼모멘텀</button>
+      <button class="tab-button" data-tab="dividend">② 배당주</button>
+    </nav>
+
+    <!-- 듀얼모멘텀 탭 -->
+    <section class="tab-panel active" id="tab-dual_momentum">
+      <div class="card">
+        <h2>현재 상태</h2>
+        <div class="status-grid" id="dm-status-grid"></div>
+      </div>
+
+      <div class="card">
+        <h2>자산군별 모멘텀</h2>
+        <div class="table-scroll">
+          <table id="dm-signals-table">
+            <thead><tr><th>자산</th><th>구분</th><th>수익률(lookback)</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>보유 현황 &amp; 리밸런싱 제안</h2>
+        <div class="table-scroll">
+          <table id="dm-holdings-table">
+            <thead><tr><th>종목</th><th>보유수량</th><th>현재가</th><th>평가금액</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="table-scroll" style="margin-top:10px;">
+          <table id="dm-actions-table">
+            <thead><tr><th>종목</th><th>액션</th><th>수량변화</th><th>목표금액</th><th>현재금액</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>과거 기록</h2>
+        <div class="history-controls">
+          <select id="dm-history-select"><option value="">월 선택...</option></select>
+        </div>
+        <div id="dm-history-detail" class="muted">기록을 선택하세요.</div>
+      </div>
+
+      <div class="card">
+        <h2>유니버스 &amp; 보유종목 관리</h2>
+        <h3 style="font-size:0.9rem;">투자 유니버스 (모멘텀 비교 대상)</h3>
+        <div id="dm-universe-list"></div>
+        <div class="form-row">
+          <input type="text" id="dm-universe-ticker" placeholder="티커 (예: SPY)" />
+          <input type="text" id="dm-universe-label" placeholder="라벨 (예: 미국주식)" />
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.85rem;">
+            <input type="checkbox" id="dm-universe-safe" /> 안전자산
+          </label>
+          <button class="secondary" id="dm-universe-add">추가</button>
+        </div>
+
+        <h3 style="font-size:0.9rem;">모멘텀 조회 기간(개월)</h3>
+        <div class="form-row">
+          <input type="number" id="dm-lookback" min="1" max="36" style="max-width:100px;" />
+        </div>
+
+        <h3 style="font-size:0.9rem;">보유종목</h3>
+        <div id="dm-holdings-list"></div>
+        <div class="form-row">
+          <input type="text" id="dm-holding-ticker" placeholder="티커" />
+          <input type="number" id="dm-holding-shares" placeholder="수량" step="0.0001" />
+          <input type="number" id="dm-holding-cost" placeholder="평단가" step="0.01" />
+          <button class="secondary" id="dm-holding-add">추가</button>
+        </div>
+
+        <h3 style="font-size:0.9rem;">현금(달러)</h3>
+        <div class="form-row">
+          <input type="number" id="dm-cash" step="0.01" style="max-width:160px;" />
+        </div>
+
+        <button class="primary" id="dm-save">저장 (GitHub에 커밋)</button>
+        <div id="dm-save-msg"></div>
+      </div>
+    </section>
+
+    <!-- 배당주 탭 -->
+    <section class="tab-panel" id="tab-dividend">
+      <div class="card">
+        <h2>현재 상태</h2>
+        <div class="status-grid" id="dv-status-grid"></div>
+      </div>
+
+      <div class="card">
+        <h2>보유 현황 &amp; 배당수익률</h2>
+        <div class="table-scroll">
+          <table id="dv-holdings-table">
+            <thead><tr><th>종목</th><th>보유수량</th><th>현재가</th><th>평가금액</th><th>배당수익률</th><th>현재비중</th><th>목표비중</th><th>드리프트</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>리밸런싱 제안</h2>
+        <div class="table-scroll">
+          <table id="dv-actions-table">
+            <thead><tr><th>종목</th><th>액션</th><th>수량변화</th><th>목표금액</th><th>현재금액</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>과거 기록</h2>
+        <div class="history-controls">
+          <select id="dv-history-select"><option value="">월 선택...</option></select>
+        </div>
+        <div id="dv-history-detail" class="muted">기록을 선택하세요.</div>
+      </div>
+
+      <div class="card">
+        <h2>워치리스트 &amp; 보유종목 관리</h2>
+        <h3 style="font-size:0.9rem;">워치리스트 (목표비중 %)</h3>
+        <div id="dv-watchlist-list"></div>
+        <div class="form-row">
+          <input type="text" id="dv-watch-ticker" placeholder="티커 (예: KO)" />
+          <input type="number" id="dv-watch-weight" placeholder="목표비중 %" step="0.1" />
+          <button class="secondary" id="dv-watch-add">추가</button>
+        </div>
+        <p class="muted" id="dv-weight-sum-msg"></p>
+
+        <h3 style="font-size:0.9rem;">보유종목</h3>
+        <div id="dv-holdings-list"></div>
+        <div class="form-row">
+          <input type="text" id="dv-holding-ticker" placeholder="티커" />
+          <input type="number" id="dv-holding-shares" placeholder="수량" step="0.0001" />
+          <input type="number" id="dv-holding-cost" placeholder="평단가" step="0.01" />
+          <button class="secondary" id="dv-holding-add">추가</button>
+        </div>
+
+        <h3 style="font-size:0.9rem;">현금(달러) / 리밸런싱 임계값(%)</h3>
+        <div class="form-row">
+          <input type="number" id="dv-cash" placeholder="현금" step="0.01" style="max-width:160px;" />
+          <input type="number" id="dv-drift-threshold" placeholder="임계값 %" step="0.1" style="max-width:160px;" />
+        </div>
+
+        <button class="primary" id="dv-save">저장 (GitHub에 커밋)</button>
+        <div id="dv-save-msg"></div>
+      </div>
+    </section>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+{
+  "as_of": "2026-08-06",
+  "is_rebalance_day": false,
+  "signals": [
+    {
+      "ticker": "SPY",
+      "label": "미국주식",
+      "return_lookback": 0.2331377089142277
+    },
+    {
+      "ticker": "EFA",
+      "label": "선진국(미국외)주식",
+      "return_lookback": 0.25616179710328524
+    },
+    {
+      "ticker": "BIL",
+      "label": "단기국채(안전자산)",
+      "return_lookback": 0.0377624798685261
+    }
+  ],
+  "safe_asset": "BIL",
+  "selected_asset": "EFA",
+  "in_market": true,
+  "lookback_months": 12,
+  "current_holdings_value": [],
+  "total_value": 0.0,
+  "cash": 0.0,
+  "target_allocation": [
+    {
+      "ticker": "EFA",
+      "weight": 1.0
+    }
+  ],
+  "rebalance_actions": [
+    {
+      "ticker": "EFA",
+      "action": "HOLD",
+      "shares_delta": 0.0,
+      "target_value": 0.0,
+      "current_value": 0.0
+    }
+  ]
+}

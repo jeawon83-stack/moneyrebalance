@@ -1,0 +1,11 @@
+{
+  "universe": [
+    { "ticker": "SPY", "label": "미국주식" },
+    { "ticker": "EFA", "label": "선진국(미국외)주식" },
+    { "ticker": "BIL", "label": "단기국채(안전자산)" }
+  ],
+  "safe_asset": "BIL",
+  "lookback_months": 12,
+  "holdings": [],
+  "cash": 0.0
+}

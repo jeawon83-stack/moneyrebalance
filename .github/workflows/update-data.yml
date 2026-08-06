@@ -1,0 +1,61 @@
+name: Update rebalancing data
+
+on:
+  schedule:
+    # 매일 UTC 21:10 (미국 정규장 마감 후) 실행. 스크립트가 그 날이 월말인지 판단합니다.
+    - cron: "10 21 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      force_rebalance_day:
+        description: "이번 실행을 월말 리밸런싱으로 강제 처리"
+        required: false
+        default: "false"
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Run dual momentum script
+        working-directory: scripts
+        run: |
+          if [ "${{ inputs.force_rebalance_day }}" = "true" ]; then
+            python dual_momentum.py --force-rebalance-day
+          else
+            python dual_momentum.py
+          fi
+
+      - name: Run dividend script
+        working-directory: scripts
+        run: |
+          if [ "${{ inputs.force_rebalance_day }}" = "true" ]; then
+            python dividend.py --force-rebalance-day
+          else
+            python dividend.py
+          fi
+
+      - name: Commit and push updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/data/
+          if git diff --cached --quiet; then
+            echo "No data changes to commit."
+          else
+            git commit -m "chore: update rebalancing data ($(date -u +%Y-%m-%d))"
+            git push
+          fi

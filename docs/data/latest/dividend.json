@@ -1,0 +1,10 @@
+{
+  "as_of": "2026-08-06",
+  "is_rebalance_day": false,
+  "drift_threshold": 0.05,
+  "holdings": [],
+  "total_value": 0.0,
+  "cash": 0.0,
+  "target_vs_current": [],
+  "rebalance_actions": []
+}
