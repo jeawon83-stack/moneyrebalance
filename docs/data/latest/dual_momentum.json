@@ -1,39 +1,104 @@
 {
   "as_of": "2026-08-06",
   "is_rebalance_day": false,
-  "signals": [
+  "classes": [
     {
-      "ticker": "SPY",
-      "label": "미국주식",
-      "return_lookback": 0.2331377089142277
+      "name": "미국주식",
+      "weight": 0.25,
+      "candidates": [
+        {
+          "ticker": "SPY",
+          "return_lookback": 0.2331377089142277
+        }
+      ],
+      "selected_asset": "SPY",
+      "in_market": true
     },
     {
-      "ticker": "EFA",
-      "label": "선진국(미국외)주식",
-      "return_lookback": 0.25616179710328524
+      "name": "선진국주식",
+      "weight": 0.25,
+      "candidates": [
+        {
+          "ticker": "EFA",
+          "return_lookback": 0.25616179710328524
+        }
+      ],
+      "selected_asset": "EFA",
+      "in_market": true
     },
     {
-      "ticker": "BIL",
-      "label": "단기국채(안전자산)",
-      "return_lookback": 0.037762659601331405
+      "name": "미국채권",
+      "weight": 0.25,
+      "candidates": [
+        {
+          "ticker": "AGG",
+          "return_lookback": 0.02461655218341674
+        }
+      ],
+      "selected_asset": "BIL",
+      "in_market": false
+    },
+    {
+      "name": "리츠",
+      "weight": 0.25,
+      "candidates": [
+        {
+          "ticker": "VNQ",
+          "return_lookback": 0.14383833375752797
+        }
+      ],
+      "selected_asset": "VNQ",
+      "in_market": true
     }
   ],
   "safe_asset": "BIL",
-  "selected_asset": "EFA",
-  "in_market": true,
+  "safe_asset_return": 0.0377624798685261,
   "lookback_months": 12,
+  "target_allocation": [
+    {
+      "ticker": "SPY",
+      "weight": 0.25
+    },
+    {
+      "ticker": "EFA",
+      "weight": 0.25
+    },
+    {
+      "ticker": "BIL",
+      "weight": 0.25
+    },
+    {
+      "ticker": "VNQ",
+      "weight": 0.25
+    }
+  ],
   "current_holdings_value": [],
   "total_value": 0.0,
   "cash": 0.0,
-  "target_allocation": [
-    {
-      "ticker": "EFA",
-      "weight": 1.0
-    }
-  ],
   "rebalance_actions": [
     {
+      "ticker": "BIL",
+      "action": "HOLD",
+      "shares_delta": 0.0,
+      "target_value": 0.0,
+      "current_value": 0.0
+    },
+    {
       "ticker": "EFA",
+      "action": "HOLD",
+      "shares_delta": 0.0,
+      "target_value": 0.0,
+      "current_value": 0.0
+    },
+    {
+      "ticker": "SPY",
+      "action": "HOLD",
+      "shares_delta": 0.0,
+      "target_value": 0.0,
+      "current_value": 0.0
+    },
+    {
+      "ticker": "VNQ",
       "action": "HOLD",
       "shares_delta": 0.0,
       "target_value": 0.0,

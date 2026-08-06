@@ -140,11 +140,13 @@ function initTabs() {
 function renderDmStatus(latest) {
   const grid = document.getElementById("dm-status-grid");
   grid.innerHTML = "";
+  const classes = latest.classes || [];
+  const inMarketCount = classes.filter((c) => c.in_market).length;
   const stats = [
     ["기준일", latest.as_of || "-"],
     ["월말 리밸런싱", latest.is_rebalance_day ? "예" : "아니오"],
-    ["선택 자산", latest.selected_asset || "-"],
-    ["시장 진입 여부", latest.in_market === null || latest.in_market === undefined ? "-" : latest.in_market ? "위험자산 편입" : "안전자산 대피"],
+    ["안전자산", latest.safe_asset || "-"],
+    ["위험자산 편입 자산군", classes.length ? `${inMarketCount} / ${classes.length}` : "-"],
     ["조회 기간", latest.lookback_months ? `${latest.lookback_months}개월` : "-"],
     ["총 평가금액", fmtMoney(latest.total_value)],
   ];
@@ -153,20 +155,30 @@ function renderDmStatus(latest) {
   }
 }
 
-function renderDmSignals(latest) {
-  const tbody = document.querySelector("#dm-signals-table tbody");
+function renderDmClasses(latest) {
+  const tbody = document.querySelector("#dm-classes-table tbody");
   tbody.innerHTML = "";
-  (latest.signals || []).forEach((s) => {
-    const isSelected = s.ticker === latest.selected_asset;
-    const isSafe = s.ticker === latest.safe_asset;
-    const tag = isSelected ? "선택됨" : isSafe ? "안전자산" : "";
+  (latest.classes || []).forEach((c) => {
+    const candidateText = (c.candidates || [])
+      .map((cand) => `${cand.ticker}(${fmtPercent(cand.return_lookback)})`)
+      .join(", ");
     tbody.appendChild(
       el("tr", {}, [
-        el("td", { text: `${s.ticker} ${isSelected ? "★" : ""}` }),
-        el("td", { text: tag || s.label || "-" }),
-        el("td", { text: fmtPercent(s.return_lookback) }),
+        el("td", { text: c.name || "-" }),
+        el("td", { text: fmtPercent(c.weight) }),
+        el("td", { text: candidateText || "-" }),
+        el("td", { text: c.selected_asset || "-" }),
+        el("td", {}, [el("span", { class: `badge ${c.in_market ? "buy" : "hold"}`, text: c.in_market ? "편입" : "안전자산" })]),
       ])
     );
+  });
+}
+
+function renderDmTargetAllocation(latest) {
+  const tbody = document.querySelector("#dm-target-table tbody");
+  tbody.innerHTML = "";
+  (latest.target_allocation || []).forEach((t) => {
+    tbody.appendChild(el("tr", {}, [el("td", { text: t.ticker }), el("td", { text: fmtPercent(t.weight) })]));
   });
 }
 
@@ -204,7 +216,8 @@ async function loadDualMomentumLatest() {
   try {
     const latest = await fetchJSON("data/latest/dual_momentum.json");
     renderDmStatus(latest);
-    renderDmSignals(latest);
+    renderDmClasses(latest);
+    renderDmTargetAllocation(latest);
     renderDmHoldings(latest);
     renderDmActions(latest);
   } catch (e) {
@@ -311,12 +324,19 @@ async function initHistory(tab, selectId, detailId, renderFn) {
 
 function renderDmHistoryDetail(data) {
   const wrap = el("div");
-  wrap.appendChild(el("p", { text: `선택 자산: ${data.selected_asset || "-"} (${data.in_market ? "위험자산 편입" : "안전자산 대피"}) · 총 평가금액: ${fmtMoney(data.total_value)}` }));
+  wrap.appendChild(el("p", { text: `총 평가금액: ${fmtMoney(data.total_value)} · 안전자산: ${data.safe_asset || "-"}` }));
   const table = el("table");
-  const thead = el("thead", {}, [el("tr", {}, [el("th", { text: "자산" }), el("th", { text: "수익률" })])]);
+  const thead = el("thead", {}, [el("tr", {}, [el("th", { text: "자산군" }), el("th", { text: "선택자산" }), el("th", { text: "비중" }), el("th", { text: "편입여부" })])]);
   const tbody = el("tbody");
-  (data.signals || []).forEach((s) => {
-    tbody.appendChild(el("tr", {}, [el("td", { text: s.ticker }), el("td", { text: fmtPercent(s.return_lookback) })]));
+  (data.classes || []).forEach((c) => {
+    tbody.appendChild(
+      el("tr", {}, [
+        el("td", { text: c.name || "-" }),
+        el("td", { text: c.selected_asset || "-" }),
+        el("td", { text: fmtPercent(c.weight) }),
+        el("td", { text: c.in_market ? "편입" : "안전자산" }),
+      ])
+    );
   });
   table.appendChild(thead);
   table.appendChild(tbody);
@@ -348,24 +368,26 @@ function renderDvHistoryDetail(data) {
 
 // ---------- config management: dual momentum ----------
 
-function renderDmUniverseList() {
-  const container = document.getElementById("dm-universe-list");
+function renderDmClassesList() {
+  const container = document.getElementById("dm-classes-list");
   container.innerHTML = "";
-  state.dmConfig.universe.forEach((u, idx) => {
-    const isSafe = u.ticker === state.dmConfig.safe_asset;
+  let sum = 0;
+  state.dmConfig.asset_classes.forEach((c, idx) => {
+    sum += c.weight || 0;
     container.appendChild(
       el("div", { class: "list-row" }, [
-        el("span", { text: `${u.ticker} — ${u.label || ""} ${isSafe ? "(안전자산)" : ""}` }),
+        el("span", { text: `${c.name} — 비중 ${fmtPercent(c.weight)} — 후보: ${(c.candidates || []).join(", ")}` }),
         el("button", { class: "danger", text: "삭제" }).also((btn) =>
           btn.addEventListener("click", () => {
-            state.dmConfig.universe.splice(idx, 1);
-            if (isSafe) state.dmConfig.safe_asset = state.dmConfig.universe[0]?.ticker || "";
-            renderDmUniverseList();
+            state.dmConfig.asset_classes.splice(idx, 1);
+            renderDmClassesList();
           })
         ),
       ])
     );
   });
+  const msgEl = document.getElementById("dm-weight-sum-msg");
+  msgEl.textContent = `비중 합계: ${fmtPercent(sum)}` + (Math.abs(sum - 1) > 0.001 ? " (100%가 되도록 조정하세요)" : "");
 }
 
 function renderDmHoldingsList() {
@@ -387,24 +409,28 @@ function renderDmHoldingsList() {
 }
 
 function fillDmForm() {
+  document.getElementById("dm-safe-asset").value = state.dmConfig.safe_asset || "";
   document.getElementById("dm-lookback").value = state.dmConfig.lookback_months;
   document.getElementById("dm-cash").value = state.dmConfig.cash;
-  renderDmUniverseList();
+  renderDmClassesList();
   renderDmHoldingsList();
 }
 
 function initDmManage() {
-  document.getElementById("dm-universe-add").addEventListener("click", () => {
-    const ticker = document.getElementById("dm-universe-ticker").value.trim().toUpperCase();
-    const label = document.getElementById("dm-universe-label").value.trim();
-    const isSafe = document.getElementById("dm-universe-safe").checked;
-    if (!ticker) return;
-    state.dmConfig.universe.push({ ticker, label });
-    if (isSafe) state.dmConfig.safe_asset = ticker;
-    document.getElementById("dm-universe-ticker").value = "";
-    document.getElementById("dm-universe-label").value = "";
-    document.getElementById("dm-universe-safe").checked = false;
-    renderDmUniverseList();
+  document.getElementById("dm-class-add").addEventListener("click", () => {
+    const name = document.getElementById("dm-class-name").value.trim();
+    const weightPct = parseFloat(document.getElementById("dm-class-weight").value);
+    const candidates = document
+      .getElementById("dm-class-candidates")
+      .value.split(",")
+      .map((t) => t.trim().toUpperCase())
+      .filter(Boolean);
+    if (!name || Number.isNaN(weightPct) || candidates.length === 0) return;
+    state.dmConfig.asset_classes.push({ name, weight: weightPct / 100, candidates });
+    document.getElementById("dm-class-name").value = "";
+    document.getElementById("dm-class-weight").value = "";
+    document.getElementById("dm-class-candidates").value = "";
+    renderDmClassesList();
   });
 
   document.getElementById("dm-holding-add").addEventListener("click", () => {
@@ -423,6 +449,7 @@ function initDmManage() {
     const msgEl = document.getElementById("dm-save-msg");
     msgEl.textContent = "";
     msgEl.className = "";
+    state.dmConfig.safe_asset = document.getElementById("dm-safe-asset").value.trim().toUpperCase() || "BIL";
     state.dmConfig.lookback_months = parseInt(document.getElementById("dm-lookback").value, 10) || 12;
     state.dmConfig.cash = parseFloat(document.getElementById("dm-cash").value) || 0;
     try {

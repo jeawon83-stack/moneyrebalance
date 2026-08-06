@@ -39,8 +39,18 @@
       <div class="card">
         <h2>자산군별 모멘텀</h2>
         <div class="table-scroll">
-          <table id="dm-signals-table">
-            <thead><tr><th>자산</th><th>구분</th><th>수익률(lookback)</th></tr></thead>
+          <table id="dm-classes-table">
+            <thead><tr><th>자산군</th><th>비중</th><th>후보종목(수익률)</th><th>선택자산</th><th>시장진입</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>목표 배분</h2>
+        <div class="table-scroll">
+          <table id="dm-target-table">
+            <thead><tr><th>종목</th><th>목표비중</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
@@ -71,22 +81,22 @@
       </div>
 
       <div class="card">
-        <h2>유니버스 &amp; 보유종목 관리</h2>
-        <h3 style="font-size:0.9rem;">투자 유니버스 (모멘텀 비교 대상)</h3>
-        <div id="dm-universe-list"></div>
+        <h2>자산군 &amp; 보유종목 관리</h2>
+        <h3 style="font-size:0.9rem;">안전자산 / 모멘텀 조회 기간(개월)</h3>
         <div class="form-row">
-          <input type="text" id="dm-universe-ticker" placeholder="티커 (예: SPY)" />
-          <input type="text" id="dm-universe-label" placeholder="라벨 (예: 미국주식)" />
-          <label style="display:flex;align-items:center;gap:4px;font-size:0.85rem;">
-            <input type="checkbox" id="dm-universe-safe" /> 안전자산
-          </label>
-          <button class="secondary" id="dm-universe-add">추가</button>
+          <input type="text" id="dm-safe-asset" placeholder="안전자산 티커 (예: BIL)" style="max-width:200px;" />
+          <input type="number" id="dm-lookback" min="1" max="36" placeholder="조회기간(개월)" style="max-width:160px;" />
         </div>
 
-        <h3 style="font-size:0.9rem;">모멘텀 조회 기간(개월)</h3>
+        <h3 style="font-size:0.9rem;">자산군 (비중 합계 100%가 되도록)</h3>
+        <div id="dm-classes-list"></div>
         <div class="form-row">
-          <input type="number" id="dm-lookback" min="1" max="36" style="max-width:100px;" />
+          <input type="text" id="dm-class-name" placeholder="자산군 이름 (예: 미국주식)" />
+          <input type="number" id="dm-class-weight" placeholder="비중 %" step="0.1" />
+          <input type="text" id="dm-class-candidates" placeholder="후보 티커 (콤마로 구분, 예: SPY,QQQ)" />
+          <button class="secondary" id="dm-class-add">추가</button>
         </div>
+        <p class="muted" id="dm-weight-sum-msg"></p>
 
         <h3 style="font-size:0.9rem;">보유종목</h3>
         <div id="dm-holdings-list"></div>

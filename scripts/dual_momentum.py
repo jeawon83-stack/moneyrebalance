@@ -1,4 +1,11 @@
-"""듀얼모멘텀(GEM) 전략 시그널 계산 및 리밸런싱 제안 생성."""
+"""종합 듀얼모멘텀 전략: 자산군별 독립 시그널 계산 및 리밸런싱 제안 생성.
+
+여러 자산군(미국주식/선진국주식/채권/리츠 등)을 각각 독립적으로 듀얼모멘텀 판단한다.
+자산군마다 후보종목 중 상대모멘텀 1위를 고르고(relative momentum), 그 종목의 수익률이
+공통 안전자산의 수익률보다 높으면(absolute momentum) 그 자산군 비중만큼 해당 종목에,
+아니면 안전자산에 배분한다. 여러 자산군이 동시에 안전자산으로 대피하면 안전자산 비중은
+합산된다.
+"""
 import argparse
 
 from common import (
@@ -20,46 +27,62 @@ ACTION_EPSILON = 1.0  # 이 금액(달러) 미만 차이는 HOLD 처리
 
 
 def compute_signals(config: dict) -> dict:
-    universe = config["universe"]
-    safe_asset = config.get("safe_asset") or universe[-1]["ticker"]
+    safe_asset = config.get("safe_asset", "BIL")
     lookback_months = config.get("lookback_months", 12)
+    asset_classes = config.get("asset_classes", [])
+    if not asset_classes:
+        raise ValueError("asset_classes가 비어있습니다. 자산군을 하나 이상 추가하세요.")
 
-    signals = []
-    for asset in universe:
-        ticker = asset["ticker"]
-        ret = fetch_trailing_return(ticker, lookback_months)
-        signals.append({"ticker": ticker, "label": asset.get("label", ticker), "return_lookback": ret})
+    tickers_needed = {safe_asset}
+    for cls in asset_classes:
+        tickers_needed.update(cls.get("candidates", []))
 
-    signal_by_ticker = {s["ticker"]: s for s in signals}
-    risk_signals = [s for s in signals if s["ticker"] != safe_asset]
-    if not risk_signals:
-        raise ValueError("safe_asset을 제외한 위험자산이 유니버스에 없습니다.")
+    returns = {ticker: fetch_trailing_return(ticker, lookback_months) for ticker in tickers_needed}
+    safe_return = returns[safe_asset]
 
-    best_risk = max(risk_signals, key=lambda s: s["return_lookback"])
-    safe_signal = signal_by_ticker.get(safe_asset)
-    if safe_signal is None:
-        raise ValueError(f"safe_asset '{safe_asset}'이 유니버스에 없습니다.")
+    classes_out = []
+    weight_by_ticker = {}
+    for cls in asset_classes:
+        candidates = cls.get("candidates", [])
+        if not candidates:
+            continue
+        candidate_returns = [{"ticker": t, "return_lookback": returns[t]} for t in candidates]
+        best = max(candidate_returns, key=lambda c: c["return_lookback"])
+        weight = cls.get("weight", 0.0)
+        in_market = best["return_lookback"] > safe_return
+        selected_asset = best["ticker"] if in_market else safe_asset
 
-    in_market = best_risk["return_lookback"] > safe_signal["return_lookback"]
-    selected_asset = best_risk["ticker"] if in_market else safe_asset
+        weight_by_ticker[selected_asset] = weight_by_ticker.get(selected_asset, 0.0) + weight
+        classes_out.append(
+            {
+                "name": cls.get("name", ""),
+                "weight": weight,
+                "candidates": candidate_returns,
+                "selected_asset": selected_asset,
+                "in_market": in_market,
+            }
+        )
+
+    target_allocation = [
+        {"ticker": ticker, "weight": round(weight, 6)} for ticker, weight in weight_by_ticker.items() if weight > 0
+    ]
 
     return {
-        "signals": signals,
+        "classes": classes_out,
         "safe_asset": safe_asset,
-        "selected_asset": selected_asset,
-        "in_market": in_market,
+        "safe_asset_return": safe_return,
         "lookback_months": lookback_months,
+        "target_allocation": target_allocation,
     }
 
 
-def compute_portfolio(config: dict, selected_asset: str) -> dict:
+def compute_portfolio(config: dict, target_allocation: list) -> dict:
     holdings = config.get("holdings", [])
     cash = config.get("cash", 0.0)
+    target_weight_by_ticker = {t["ticker"]: t["weight"] for t in target_allocation}
 
-    prices = {}
-    tickers_needed = {h["ticker"] for h in holdings} | {selected_asset}
-    for ticker in tickers_needed:
-        prices[ticker] = fetch_current_price(ticker)
+    tickers_needed = {h["ticker"] for h in holdings} | set(target_weight_by_ticker.keys())
+    prices = {ticker: fetch_current_price(ticker) for ticker in tickers_needed}
 
     current_holdings_value = []
     holdings_value_by_ticker = {}
@@ -73,45 +96,33 @@ def compute_portfolio(config: dict, selected_asset: str) -> dict:
         )
 
     total_value = sum(holdings_value_by_ticker.values()) + cash
-    target_allocation = [{"ticker": selected_asset, "weight": 1.0}]
 
     rebalance_actions = []
-    target_value = total_value * 1.0
-    current_value = holdings_value_by_ticker.get(selected_asset, 0.0)
-    delta_value = target_value - current_value
-    price = prices[selected_asset]
-    if abs(delta_value) < ACTION_EPSILON:
-        action = "HOLD"
-        shares_delta = 0.0
-    elif delta_value > 0:
-        action = "BUY"
-        shares_delta = round_shares(delta_value / price)
-    else:
-        action = "SELL"
-        shares_delta = round_shares(delta_value / price)
-    rebalance_actions.append(
-        {
-            "ticker": selected_asset,
-            "action": action,
-            "shares_delta": shares_delta,
-            "target_value": round(target_value, 2),
-            "current_value": round(current_value, 2),
-        }
-    )
+    all_tickers = set(target_weight_by_ticker) | set(holdings_value_by_ticker)
+    for ticker in sorted(all_tickers):
+        target_weight = target_weight_by_ticker.get(ticker, 0.0)
+        target_value = total_value * target_weight
+        current_value = holdings_value_by_ticker.get(ticker, 0.0)
+        delta_value = target_value - current_value
+        price = prices[ticker]
 
-    # 목표자산이 아닌 종목을 보유 중이면 전량 매도 제안
-    for ticker, value in holdings_value_by_ticker.items():
-        if ticker == selected_asset:
-            continue
-        if value < ACTION_EPSILON:
-            continue
+        if abs(delta_value) < ACTION_EPSILON:
+            action = "HOLD"
+            shares_delta = 0.0
+        elif delta_value > 0:
+            action = "BUY"
+            shares_delta = round_shares(delta_value / price)
+        else:
+            action = "SELL"
+            shares_delta = round_shares(delta_value / price)
+
         rebalance_actions.append(
             {
                 "ticker": ticker,
-                "action": "SELL",
-                "shares_delta": -next(h["shares"] for h in holdings if h["ticker"] == ticker),
-                "target_value": 0.0,
-                "current_value": round(value, 2),
+                "action": action,
+                "shares_delta": shares_delta,
+                "target_value": round(target_value, 2),
+                "current_value": round(current_value, 2),
             }
         )
 
@@ -119,7 +130,6 @@ def compute_portfolio(config: dict, selected_asset: str) -> dict:
         "current_holdings_value": current_holdings_value,
         "total_value": round(total_value, 2),
         "cash": cash,
-        "target_allocation": target_allocation,
         "rebalance_actions": rebalance_actions,
     }
 
@@ -134,7 +144,7 @@ def main():
     is_rebalance_day = args.force_rebalance_day or is_last_day_of_month(today)
 
     signal_result = compute_signals(config)
-    portfolio_result = compute_portfolio(config, signal_result["selected_asset"])
+    portfolio_result = compute_portfolio(config, signal_result["target_allocation"])
 
     result = {
         "as_of": today.isoformat(),
