@@ -24,7 +24,7 @@
       "candidates": [
         {
           "ticker": "LQD",
-          "return_lookback": 0.0168634804380996
+          "return_lookback": 0.016863554345549314
         },
         {
           "ticker": "HYG",
@@ -44,7 +44,7 @@
         },
         {
           "ticker": "REM",
-          "return_lookback": 0.0648516778047632
+          "return_lookback": 0.06485177807180986
         }
       ],
       "selected_asset": "REET",
@@ -56,7 +56,7 @@
       "candidates": [
         {
           "ticker": "TLT",
-          "return_lookback": -0.014306673889724397
+          "return_lookback": -0.014306852507851131
         },
         {
           "ticker": "GLD",
