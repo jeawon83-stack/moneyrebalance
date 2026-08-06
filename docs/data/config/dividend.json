@@ -1,6 +1,12 @@
 {
   "watchlist": [],
-  "holdings": [],
+  "holdings": [
+    {
+      "ticker": "IDV",
+      "shares": 85,
+      "avg_cost": 35.6129
+    }
+  ],
   "cash": 0,
   "drift_threshold": 0.05
 }
