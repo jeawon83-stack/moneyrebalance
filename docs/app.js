@@ -238,8 +238,10 @@ function renderDvHoldings(latest) {
       el("tr", {}, [
         el("td", { text: h.ticker }),
         el("td", { text: fmtNumber(h.shares) }),
+        el("td", { text: h.avg_cost ? fmtMoney(h.avg_cost) : "-" }),
         el("td", { text: fmtMoney(h.price) }),
         el("td", { text: fmtMoney(h.value) }),
+        el("td", { text: h.price_return === null || h.price_return === undefined ? "-" : fmtPercent(h.price_return) }),
         el("td", { text: fmtPercent(h.dividend_yield) }),
         el("td", { text: fmtPercent(h.current_weight) }),
         el("td", { text: fmtPercent(h.target_weight) }),

@@ -1,5 +1,6 @@
 """배당주 전략: 배당수익률 계산 및 목표비중 대비 리밸런싱 제안 생성."""
 import argparse
+import math
 
 from common import (
     DATA_DIR,
@@ -7,7 +8,6 @@ from common import (
     fetch_trailing_dividends,
     is_last_day_of_month,
     load_json,
-    round_shares,
     save_json,
     today_utc,
 )
@@ -22,6 +22,7 @@ ACTION_EPSILON = 1.0  # 이 금액(달러) 미만 차이는 HOLD 처리
 def compute(config: dict) -> dict:
     watchlist = config.get("watchlist", [])
     holdings = {h["ticker"]: h["shares"] for h in config.get("holdings", [])}
+    avg_costs = {h["ticker"]: h.get("avg_cost", 0.0) for h in config.get("holdings", [])}
     cash = config.get("cash", 0.0)
     drift_threshold = config.get("drift_threshold", 0.05)
 
@@ -33,6 +34,7 @@ def compute(config: dict) -> dict:
         price = fetch_current_price(ticker)
         trailing_div = fetch_trailing_dividends(ticker, months=12)
         shares = holdings.get(ticker, 0.0)
+        avg_cost = avg_costs.get(ticker, 0.0)
         value = price * shares
         values_by_ticker[ticker] = value
         holdings_out.append(
@@ -41,6 +43,8 @@ def compute(config: dict) -> dict:
                 "shares": shares,
                 "price": round(price, 2),
                 "value": round(value, 2),
+                "avg_cost": round(avg_cost, 2),
+                "price_return": round((price - avg_cost) / avg_cost, 4) if avg_cost else None,
                 "trailing_dividend": round(trailing_div, 4),
                 "dividend_yield": round(trailing_div / price, 4) if price else 0.0,
             }
@@ -76,15 +80,14 @@ def compute(config: dict) -> dict:
         current_value = values_by_ticker[ticker]
         delta_value = target_value - current_value
         price = h["price"]
-        if abs(delta_value) < ACTION_EPSILON or price == 0:
+        shares_delta = math.trunc(delta_value / price) if price else 0
+        if abs(delta_value) < ACTION_EPSILON or price == 0 or shares_delta == 0:
             action = "HOLD"
-            shares_delta = 0.0
+            shares_delta = 0
         elif delta_value > 0:
             action = "BUY"
-            shares_delta = round_shares(delta_value / price)
         else:
             action = "SELL"
-            shares_delta = round_shares(delta_value / price)
         rebalance_actions.append(
             {
                 "ticker": ticker,
