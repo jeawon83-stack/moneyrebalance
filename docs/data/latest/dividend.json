@@ -21,7 +21,7 @@
       "trailing_dividend": 1.048,
       "dividend_yield": 0.0312,
       "current_weight": 0.34,
-      "target_weight": 0.4
+      "target_weight": 0.0
     },
     {
       "ticker": "SCHY",
@@ -46,9 +46,9 @@
     },
     {
       "ticker": "SCHD",
-      "target_weight": 0.4,
+      "target_weight": 0.0,
       "current_weight": 0.34,
-      "drift": -0.06,
+      "drift": 0.34,
       "needs_rebalance": true
     },
     {
@@ -69,9 +69,9 @@
     },
     {
       "ticker": "SCHD",
-      "action": "BUY",
-      "shares_delta": 20.8278,
-      "target_value": 4670.17,
+      "action": "SELL",
+      "shares_delta": -118.0,
+      "target_value": 0.0,
       "current_value": 3969.52
     },
     {
