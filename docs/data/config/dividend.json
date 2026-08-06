@@ -5,6 +5,16 @@
       "ticker": "IDV",
       "shares": 85,
       "avg_cost": 35.6129
+    },
+    {
+      "ticker": "SCHY",
+      "shares": 118,
+      "avg_cost": 27.937
+    },
+    {
+      "ticker": "SCHD",
+      "shares": 118,
+      "avg_cost": 28.8386
     }
   ],
   "cash": 0,
