@@ -2,10 +2,10 @@
   "safe_asset": "BIL",
   "lookback_months": 12,
   "asset_classes": [
-    { "name": "미국주식", "weight": 0.25, "candidates": ["SPY"] },
-    { "name": "선진국주식", "weight": 0.25, "candidates": ["EFA"] },
-    { "name": "미국채권", "weight": 0.25, "candidates": ["AGG"] },
-    { "name": "리츠", "weight": 0.25, "candidates": ["VNQ"] }
+    { "name": "미국주식", "weight": 0.25, "candidates": ["SPY", "QQQ"] },
+    { "name": "선진국주식", "weight": 0.25, "candidates": ["EFA", "VWO"] },
+    { "name": "미국채권", "weight": 0.25, "candidates": ["AGG", "TLT"] },
+    { "name": "리츠", "weight": 0.25, "candidates": ["VNQ", "VNQI"] }
   ],
   "holdings": [],
   "cash": 0.0

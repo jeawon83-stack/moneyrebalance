@@ -9,9 +9,13 @@
         {
           "ticker": "SPY",
           "return_lookback": 0.2331377089142277
+        },
+        {
+          "ticker": "QQQ",
+          "return_lookback": 0.2777072847487718
         }
       ],
-      "selected_asset": "SPY",
+      "selected_asset": "QQQ",
       "in_market": true
     },
     {
@@ -21,6 +25,10 @@
         {
           "ticker": "EFA",
           "return_lookback": 0.25616179710328524
+        },
+        {
+          "ticker": "VWO",
+          "return_lookback": 0.23160296679001813
         }
       ],
       "selected_asset": "EFA",
@@ -32,7 +40,11 @@
       "candidates": [
         {
           "ticker": "AGG",
-          "return_lookback": 0.02461655218341674
+          "return_lookback": 0.02461638823632195
+        },
+        {
+          "ticker": "TLT",
+          "return_lookback": -0.014306763198795869
         }
       ],
       "selected_asset": "BIL",
@@ -45,6 +57,10 @@
         {
           "ticker": "VNQ",
           "return_lookback": 0.14383833375752797
+        },
+        {
+          "ticker": "VNQI",
+          "return_lookback": 0.04776407174722053
         }
       ],
       "selected_asset": "VNQ",
@@ -52,11 +68,11 @@
     }
   ],
   "safe_asset": "BIL",
-  "safe_asset_return": 0.0377624798685261,
+  "safe_asset_return": 0.03776256973492087,
   "lookback_months": 12,
   "target_allocation": [
     {
-      "ticker": "SPY",
+      "ticker": "QQQ",
       "weight": 0.25
     },
     {
@@ -91,7 +107,7 @@
       "current_value": 0.0
     },
     {
-      "ticker": "SPY",
+      "ticker": "QQQ",
       "action": "HOLD",
       "shares_delta": 0.0,
       "target_value": 0.0,

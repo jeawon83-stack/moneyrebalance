@@ -420,16 +420,15 @@ function initDmManage() {
   document.getElementById("dm-class-add").addEventListener("click", () => {
     const name = document.getElementById("dm-class-name").value.trim();
     const weightPct = parseFloat(document.getElementById("dm-class-weight").value);
-    const candidates = document
-      .getElementById("dm-class-candidates")
-      .value.split(",")
-      .map((t) => t.trim().toUpperCase())
-      .filter(Boolean);
+    const candidate1 = document.getElementById("dm-class-candidate1").value.trim().toUpperCase();
+    const candidate2 = document.getElementById("dm-class-candidate2").value.trim().toUpperCase();
+    const candidates = [candidate1, candidate2].filter(Boolean);
     if (!name || Number.isNaN(weightPct) || candidates.length === 0) return;
     state.dmConfig.asset_classes.push({ name, weight: weightPct / 100, candidates });
     document.getElementById("dm-class-name").value = "";
     document.getElementById("dm-class-weight").value = "";
-    document.getElementById("dm-class-candidates").value = "";
+    document.getElementById("dm-class-candidate1").value = "";
+    document.getElementById("dm-class-candidate2").value = "";
     renderDmClassesList();
   });
 
