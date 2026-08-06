@@ -46,7 +46,10 @@ function badge(action) {
 }
 
 async function fetchJSON(path) {
-  const res = await fetch(path, { cache: "no-store" });
+  // GitHub Pages는 CDN을 통해 서빙되므로 fetch의 cache 옵션만으로는 CDN 캐시를 우회할 수 없다.
+  // 매 요청마다 고유한 쿼리 파라미터를 붙여 항상 최신 파일을 받아온다.
+  const bustedUrl = path + (path.includes("?") ? "&" : "?") + "_=" + Date.now();
+  const res = await fetch(bustedUrl, { cache: "no-store" });
   if (!res.ok) throw new Error(`${path} 로드 실패 (${res.status})`);
   return res.json();
 }
