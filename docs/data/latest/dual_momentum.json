@@ -32,7 +32,7 @@
       "candidates": [
         {
           "ticker": "AGG",
-          "return_lookback": 0.02461655218341674
+          "return_lookback": 0.024616634156984007
         }
       ],
       "selected_asset": "BIL",
@@ -52,7 +52,7 @@
     }
   ],
   "safe_asset": "BIL",
-  "safe_asset_return": 0.0377624798685261,
+  "safe_asset_return": 0.03776239000214665,
   "lookback_months": 12,
   "target_allocation": [
     {
