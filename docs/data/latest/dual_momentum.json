@@ -3,88 +3,88 @@
   "is_rebalance_day": false,
   "classes": [
     {
-      "name": "미국주식",
+      "name": "주식",
       "weight": 0.25,
       "candidates": [
         {
-          "ticker": "SPY",
-          "return_lookback": 0.2331377089142277
+          "ticker": "SPYM",
+          "return_lookback": 0.23411870611808938
         },
         {
-          "ticker": "QQQ",
-          "return_lookback": 0.2777072847487718
+          "ticker": "IEFA",
+          "return_lookback": 0.25137214924494566
         }
       ],
-      "selected_asset": "QQQ",
+      "selected_asset": "IEFA",
       "in_market": true
     },
     {
-      "name": "선진국주식",
+      "name": "회사채",
       "weight": 0.25,
       "candidates": [
         {
-          "ticker": "EFA",
-          "return_lookback": 0.25616179710328524
+          "ticker": "LQD",
+          "return_lookback": 0.0168634804380996
         },
         {
-          "ticker": "VWO",
-          "return_lookback": 0.23160296679001813
+          "ticker": "HYG",
+          "return_lookback": 0.05046340809543093
         }
       ],
-      "selected_asset": "EFA",
+      "selected_asset": "HYG",
       "in_market": true
     },
     {
-      "name": "미국채권",
+      "name": "부동산",
       "weight": 0.25,
       "candidates": [
         {
-          "ticker": "AGG",
-          "return_lookback": 0.02461638823632195
+          "ticker": "REET",
+          "return_lookback": 0.1905426892244686
         },
+        {
+          "ticker": "REM",
+          "return_lookback": 0.0648516778047632
+        }
+      ],
+      "selected_asset": "REET",
+      "in_market": true
+    },
+    {
+      "name": "대체자산",
+      "weight": 0.25,
+      "candidates": [
         {
           "ticker": "TLT",
-          "return_lookback": -0.014306763198795869
-        }
-      ],
-      "selected_asset": "BIL",
-      "in_market": false
-    },
-    {
-      "name": "리츠",
-      "weight": 0.25,
-      "candidates": [
-        {
-          "ticker": "VNQ",
-          "return_lookback": 0.14383833375752797
+          "return_lookback": -0.014306673889724397
         },
         {
-          "ticker": "VNQI",
-          "return_lookback": 0.04776407174722053
+          "ticker": "GLD",
+          "return_lookback": 0.2532244381299815
         }
       ],
-      "selected_asset": "VNQ",
+      "selected_asset": "GLD",
       "in_market": true
     }
   ],
   "safe_asset": "BIL",
-  "safe_asset_return": 0.03776256973492087,
+  "safe_asset_return": 0.037762659601331405,
   "lookback_months": 12,
   "target_allocation": [
     {
-      "ticker": "QQQ",
+      "ticker": "IEFA",
       "weight": 0.25
     },
     {
-      "ticker": "EFA",
+      "ticker": "HYG",
       "weight": 0.25
     },
     {
-      "ticker": "BIL",
+      "ticker": "REET",
       "weight": 0.25
     },
     {
-      "ticker": "VNQ",
+      "ticker": "GLD",
       "weight": 0.25
     }
   ],
@@ -93,28 +93,28 @@
   "cash": 0.0,
   "rebalance_actions": [
     {
-      "ticker": "BIL",
+      "ticker": "GLD",
       "action": "HOLD",
       "shares_delta": 0.0,
       "target_value": 0.0,
       "current_value": 0.0
     },
     {
-      "ticker": "EFA",
+      "ticker": "HYG",
       "action": "HOLD",
       "shares_delta": 0.0,
       "target_value": 0.0,
       "current_value": 0.0
     },
     {
-      "ticker": "QQQ",
+      "ticker": "IEFA",
       "action": "HOLD",
       "shares_delta": 0.0,
       "target_value": 0.0,
       "current_value": 0.0
     },
     {
-      "ticker": "VNQ",
+      "ticker": "REET",
       "action": "HOLD",
       "shares_delta": 0.0,
       "target_value": 0.0,
