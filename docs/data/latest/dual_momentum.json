@@ -15,7 +15,7 @@
     {
       "ticker": "BIL",
       "label": "단기국채(안전자산)",
-      "return_lookback": 0.0377624798685261
+      "return_lookback": 0.03776239000214665
     }
   ],
   "safe_asset": "BIL",
