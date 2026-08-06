@@ -1,27 +1,6 @@
 {
-  "watchlist": [
-    {
-      "ticker": "SCHD",
-      "target_weight": 0.4
-    }
-  ],
-  "holdings": [
-    {
-      "ticker": "SCHD",
-      "shares": 118,
-      "avg_cost": 28.8386
-    },
-    {
-      "ticker": "IDV",
-      "shares": 85,
-      "avg_cost": 35.6129
-    },
-    {
-      "ticker": "SCHY",
-      "shares": 118,
-      "avg_cost": 27.937
-    }
-  ],
+  "watchlist": [],
+  "holdings": [],
   "cash": 0,
   "drift_threshold": 0.05
 }
