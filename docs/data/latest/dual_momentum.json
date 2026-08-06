@@ -5,7 +5,7 @@
     {
       "ticker": "SPY",
       "label": "미국주식",
-      "return_lookback": 0.23313758834654275
+      "return_lookback": 0.2331377089142277
     },
     {
       "ticker": "EFA",
@@ -15,7 +15,7 @@
     {
       "ticker": "BIL",
       "label": "단기국채(안전자산)",
-      "return_lookback": 0.0377624798685261
+      "return_lookback": 0.03776256973492087
     }
   ],
   "safe_asset": "BIL",
