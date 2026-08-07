@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-06",
+  "as_of": "2026-08-07",
   "is_rebalance_day": false,
   "classes": [
     {
@@ -8,11 +8,11 @@
       "candidates": [
         {
           "ticker": "SPYM",
-          "return_lookback": 0.23411870611808938
+          "return_lookback": 0.23821524096627722
         },
         {
           "ticker": "IEFA",
-          "return_lookback": 0.25137214924494566
+          "return_lookback": 0.25074655581315297
         }
       ],
       "selected_asset": "IEFA",
@@ -24,11 +24,11 @@
       "candidates": [
         {
           "ticker": "LQD",
-          "return_lookback": 0.016863554345549314
+          "return_lookback": 0.012505745850840189
         },
         {
           "ticker": "HYG",
-          "return_lookback": 0.05046340809543093
+          "return_lookback": 0.05019423334924844
         }
       ],
       "selected_asset": "HYG",
@@ -40,11 +40,11 @@
       "candidates": [
         {
           "ticker": "REET",
-          "return_lookback": 0.1905426892244686
+          "return_lookback": 0.17126699479400664
         },
         {
           "ticker": "REM",
-          "return_lookback": 0.06485177807180986
+          "return_lookback": 0.060915982570102445
         }
       ],
       "selected_asset": "REET",
@@ -56,11 +56,11 @@
       "candidates": [
         {
           "ticker": "TLT",
-          "return_lookback": -0.014306852507851131
+          "return_lookback": -0.0230028420014996
         },
         {
           "ticker": "GLD",
-          "return_lookback": 0.2532244381299815
+          "return_lookback": 0.25231395051299566
         }
       ],
       "selected_asset": "GLD",
@@ -68,7 +68,7 @@
     }
   ],
   "safe_asset": "BIL",
-  "safe_asset_return": 0.037762659601331405,
+  "safe_asset_return": 0.03798944876088495,
   "lookback_months": 12,
   "target_allocation": [
     {
