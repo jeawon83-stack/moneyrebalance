@@ -8,11 +8,11 @@
       "candidates": [
         {
           "ticker": "SPYM",
-          "return_lookback": 0.23821524096627722
+          "return_lookback": 0.23640285865345279
         },
         {
           "ticker": "IEFA",
-          "return_lookback": 0.25074655581315297
+          "return_lookback": 0.2558892984788381
         }
       ],
       "selected_asset": "IEFA",
@@ -24,11 +24,11 @@
       "candidates": [
         {
           "ticker": "LQD",
-          "return_lookback": 0.012505745850840189
+          "return_lookback": 0.014591564279825109
         },
         {
           "ticker": "HYG",
-          "return_lookback": 0.05019423334924844
+          "return_lookback": 0.05112839759824794
         }
       ],
       "selected_asset": "HYG",
@@ -40,11 +40,11 @@
       "candidates": [
         {
           "ticker": "REET",
-          "return_lookback": 0.17126699479400664
+          "return_lookback": 0.18281411406078862
         },
         {
           "ticker": "REM",
-          "return_lookback": 0.060915982570102445
+          "return_lookback": 0.09850967293374602
         }
       ],
       "selected_asset": "REET",
@@ -56,11 +56,11 @@
       "candidates": [
         {
           "ticker": "TLT",
-          "return_lookback": -0.0230028420014996
+          "return_lookback": -0.014471055572105929
         },
         {
           "ticker": "GLD",
-          "return_lookback": 0.25231395051299566
+          "return_lookback": 0.2833172342051631
         }
       ],
       "selected_asset": "GLD",
@@ -68,7 +68,7 @@
     }
   ],
   "safe_asset": "BIL",
-  "safe_asset_return": 0.03798944876088495,
+  "safe_asset_return": 0.03798972334972128,
   "lookback_months": 12,
   "target_allocation": [
     {
