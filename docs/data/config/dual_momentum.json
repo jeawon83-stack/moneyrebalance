@@ -2,11 +2,55 @@
   "safe_asset": "BIL",
   "lookback_months": 12,
   "asset_classes": [
-    { "name": "주식", "weight": 0.25, "candidates": ["SPYM", "IEFA"] },
-    { "name": "회사채", "weight": 0.25, "candidates": ["LQD", "HYG"] },
-    { "name": "부동산", "weight": 0.25, "candidates": ["REET", "REM"] },
-    { "name": "대체자산", "weight": 0.25, "candidates": ["TLT", "GLD"] }
+    {
+      "name": "주식",
+      "weight": 0.25,
+      "candidates": [
+        "SPYM",
+        "IEFA"
+      ]
+    },
+    {
+      "name": "회사채",
+      "weight": 0.25,
+      "candidates": [
+        "LQD",
+        "HYG"
+      ]
+    },
+    {
+      "name": "부동산",
+      "weight": 0.25,
+      "candidates": [
+        "REET",
+        "REM"
+      ]
+    },
+    {
+      "name": "대체자산",
+      "weight": 0.25,
+      "candidates": [
+        "TLT",
+        "GLD"
+      ]
+    }
   ],
-  "holdings": [],
-  "cash": 0.0
+  "holdings": [
+    {
+      "ticker": "IEFA",
+      "shares": 39,
+      "avg_cost": 97.41
+    },
+    {
+      "ticker": "GLD",
+      "shares": 10,
+      "avg_cost": 285.593
+    },
+    {
+      "ticker": "REET",
+      "shares": 133,
+      "avg_cost": 25.51
+    }
+  ],
+  "cash": 3409
 }
