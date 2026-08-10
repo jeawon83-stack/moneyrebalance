@@ -1,7 +1,7 @@
 {
   "as_of": "2026-08-10",
   "is_rebalance_day": false,
-  "usd_krw_rate": 1417.1500244140625,
+  "usd_krw_rate": 1414.6800537109375,
   "classes": [
     {
       "name": "주식",
@@ -9,7 +9,7 @@
       "candidates": [
         {
           "ticker": "SPYM",
-          "return_lookback": 0.23640285865345279
+          "return_lookback": 0.2364027305027756
         },
         {
           "ticker": "IEFA",
@@ -25,11 +25,11 @@
       "candidates": [
         {
           "ticker": "LQD",
-          "return_lookback": 0.01459149057107112
+          "return_lookback": 0.014591637988589756
         },
         {
           "ticker": "HYG",
-          "return_lookback": 0.05112839759824794
+          "return_lookback": 0.051128291713369745
         }
       ],
       "selected_asset": "HYG",
@@ -41,11 +41,11 @@
       "candidates": [
         {
           "ticker": "REET",
-          "return_lookback": 0.18281401953459442
+          "return_lookback": 0.18281411406078862
         },
         {
           "ticker": "REM",
-          "return_lookback": 0.0985095682660686
+          "return_lookback": 0.09850967293374602
         }
       ],
       "selected_asset": "REET",
@@ -57,7 +57,7 @@
       "candidates": [
         {
           "ticker": "TLT",
-          "return_lookback": -0.014470786957439752
+          "return_lookback": -0.014470876495678131
         },
         {
           "ticker": "GLD",
@@ -69,7 +69,7 @@
     }
   ],
   "safe_asset": "BIL",
-  "safe_asset_return": 0.03798963349312334,
+  "safe_asset_return": 0.037989543636540946,
   "lookback_months": 12,
   "target_allocation": [
     {
