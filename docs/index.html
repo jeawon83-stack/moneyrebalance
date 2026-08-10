@@ -27,6 +27,7 @@
     <nav class="tabs">
       <button class="tab-button active" data-tab="dual_momentum">① 듀얼모멘텀</button>
       <button class="tab-button" data-tab="dividend">② 배당주</button>
+      <button class="tab-button" data-tab="dashboard">③ 대쉬보드</button>
     </nav>
 
     <!-- 듀얼모멘텀 탭 -->
@@ -181,6 +182,41 @@
 
         <button class="primary" id="dv-save">저장 (GitHub에 커밋)</button>
         <div id="dv-save-msg"></div>
+      </div>
+    </section>
+
+    <!-- 대쉬보드 탭 -->
+    <section class="tab-panel" id="tab-dashboard">
+      <div class="card">
+        <h2>연간 수익 현황</h2>
+        <p class="muted">금액은 매달 말 자동 기록된 값을 그대로 가져옵니다. 불입금액을 입력하면 수익률이 자동 계산됩니다.</p>
+        <div class="form-row">
+          <input type="number" id="db-year" style="max-width:120px;" />
+          <button class="secondary" id="db-load-year">연도 불러오기</button>
+        </div>
+        <div class="table-scroll">
+          <table id="db-table">
+            <thead>
+              <tr>
+                <th rowspan="2">구분</th>
+                <th colspan="3">듀얼모멘텀</th>
+                <th colspan="3">배당주투자</th>
+              </tr>
+              <tr>
+                <th>금액</th><th>불입금액</th><th>수익률</th>
+                <th>금액</th><th>불입금액</th><th>수익률</th>
+              </tr>
+            </thead>
+            <tbody id="db-table-body"></tbody>
+          </table>
+        </div>
+        <button class="primary" id="db-save">저장 (GitHub에 커밋)</button>
+        <div id="db-save-msg"></div>
+      </div>
+
+      <div class="card">
+        <h2>월별 수익률 추이</h2>
+        <div id="db-chart"></div>
       </div>
     </section>
   </div>
