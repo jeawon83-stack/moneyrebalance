@@ -39,6 +39,15 @@ def fetch_current_price(ticker: str) -> float:
     return float(hist["Close"].dropna().iloc[-1])
 
 
+def fetch_usd_krw_rate() -> float:
+    """당일 기준 원/달러 환율 (1달러 = N원)."""
+    hist = yf.Ticker("KRW=X").history(period="5d")
+    closes = hist["Close"].dropna()
+    if closes.empty:
+        raise ValueError("원/달러 환율 데이터를 가져오지 못했습니다.")
+    return float(closes.iloc[-1])
+
+
 def fetch_trailing_return(ticker: str, months: int) -> float:
     """lookback 개월 전 종가 대비 현재 종가의 총수익률."""
     period_days = months * 31 + 10

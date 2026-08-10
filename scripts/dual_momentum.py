@@ -12,6 +12,7 @@ from common import (
     DATA_DIR,
     fetch_current_price,
     fetch_trailing_return,
+    fetch_usd_krw_rate,
     is_last_day_of_month,
     load_json,
     round_shares,
@@ -146,9 +147,15 @@ def main():
     signal_result = compute_signals(config)
     portfolio_result = compute_portfolio(config, signal_result["target_allocation"])
 
+    try:
+        usd_krw_rate = fetch_usd_krw_rate()
+    except ValueError:
+        usd_krw_rate = None
+
     result = {
         "as_of": today.isoformat(),
         "is_rebalance_day": is_rebalance_day,
+        "usd_krw_rate": usd_krw_rate,
         **signal_result,
         **portfolio_result,
     }

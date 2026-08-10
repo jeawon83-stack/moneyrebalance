@@ -21,6 +21,17 @@ function fmtMoney(x) {
   return "$" + Number(x).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
+function fmtWon(x) {
+  if (x === null || x === undefined || Number.isNaN(x)) return "-";
+  return "₩" + Math.round(x).toLocaleString();
+}
+
+function fmtMoneyKRW(usdAmount, rate) {
+  const usdText = fmtMoney(usdAmount);
+  if (usdAmount === null || usdAmount === undefined || Number.isNaN(usdAmount) || !rate) return usdText;
+  return `${usdText} (${fmtWon(usdAmount * rate)})`;
+}
+
 function fmtNumber(x) {
   if (x === null || x === undefined || Number.isNaN(x)) return "-";
   return Number(x).toLocaleString(undefined, { maximumFractionDigits: 4 });
@@ -148,7 +159,8 @@ function renderDmStatus(latest) {
     ["안전자산", latest.safe_asset || "-"],
     ["위험자산 편입 자산군", classes.length ? `${inMarketCount} / ${classes.length}` : "-"],
     ["조회 기간", latest.lookback_months ? `${latest.lookback_months}개월` : "-"],
-    ["총 평가금액", fmtMoney(latest.total_value)],
+    ["총 평가금액", fmtMoneyKRW(latest.total_value, latest.usd_krw_rate)],
+    ["환율(USD/KRW)", latest.usd_krw_rate ? fmtWon(latest.usd_krw_rate) : "-"],
   ];
   for (const [label, value] of stats) {
     grid.appendChild(el("div", { class: "stat" }, [el("span", { class: "label", text: label }), el("span", { class: "value", text: value })]));
@@ -233,9 +245,10 @@ function renderDvStatus(latest) {
   const stats = [
     ["기준일", latest.as_of || "-"],
     ["월말 리밸런싱", latest.is_rebalance_day ? "예" : "아니오"],
-    ["총 평가금액", fmtMoney(latest.total_value)],
-    ["현금", fmtMoney(latest.cash)],
+    ["총 평가금액", fmtMoneyKRW(latest.total_value, latest.usd_krw_rate)],
+    ["현금", fmtMoneyKRW(latest.cash, latest.usd_krw_rate)],
     ["리밸런싱 임계값", fmtPercent(latest.drift_threshold)],
+    ["환율(USD/KRW)", latest.usd_krw_rate ? fmtWon(latest.usd_krw_rate) : "-"],
   ];
   for (const [label, value] of stats) {
     grid.appendChild(el("div", { class: "stat" }, [el("span", { class: "label", text: label }), el("span", { class: "value", text: value })]));
