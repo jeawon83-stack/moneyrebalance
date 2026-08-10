@@ -7,6 +7,7 @@
 합산된다.
 """
 import argparse
+import math
 
 from common import (
     DATA_DIR,
@@ -15,7 +16,6 @@ from common import (
     fetch_usd_krw_rate,
     is_last_day_of_month,
     load_json,
-    round_shares,
     save_json,
     today_utc,
 )
@@ -107,15 +107,14 @@ def compute_portfolio(config: dict, target_allocation: list) -> dict:
         delta_value = target_value - current_value
         price = prices[ticker]
 
-        if abs(delta_value) < ACTION_EPSILON:
+        shares_delta = math.trunc(delta_value / price) if price else 0
+        if abs(delta_value) < ACTION_EPSILON or price == 0 or shares_delta == 0:
             action = "HOLD"
-            shares_delta = 0.0
+            shares_delta = 0
         elif delta_value > 0:
             action = "BUY"
-            shares_delta = round_shares(delta_value / price)
         else:
             action = "SELL"
-            shares_delta = round_shares(delta_value / price)
 
         rebalance_actions.append(
             {
