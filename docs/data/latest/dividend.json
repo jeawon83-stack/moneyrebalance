@@ -1,6 +1,7 @@
 {
   "as_of": "2026-08-10",
   "is_rebalance_day": false,
+  "usd_krw_rate": 1412.280029296875,
   "drift_threshold": 0.05,
   "holdings": [
     {
