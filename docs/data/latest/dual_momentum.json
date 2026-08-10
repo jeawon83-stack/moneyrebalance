@@ -1,7 +1,7 @@
 {
   "as_of": "2026-08-10",
   "is_rebalance_day": false,
-  "usd_krw_rate": 1412.280029296875,
+  "usd_krw_rate": 1413.8800048828125,
   "classes": [
     {
       "name": "주식",
@@ -9,7 +9,7 @@
       "candidates": [
         {
           "ticker": "SPYM",
-          "return_lookback": 0.2364027305027756
+          "return_lookback": 0.2364029868041564
         },
         {
           "ticker": "IEFA",
@@ -57,7 +57,7 @@
       "candidates": [
         {
           "ticker": "TLT",
-          "return_lookback": -0.014470876495678131
+          "return_lookback": -0.014471234648468667
         },
         {
           "ticker": "GLD",
@@ -69,7 +69,7 @@
     }
   ],
   "safe_asset": "BIL",
-  "safe_asset_return": 0.03798972334972128,
+  "safe_asset_return": 0.03798963349312334,
   "lookback_months": 12,
   "target_allocation": [
     {
