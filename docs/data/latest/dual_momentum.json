@@ -1,7 +1,7 @@
 {
   "as_of": "2026-08-10",
   "is_rebalance_day": false,
-  "usd_krw_rate": 1415.3800048828125,
+  "usd_krw_rate": 1417.1500244140625,
   "classes": [
     {
       "name": "주식",
@@ -9,7 +9,7 @@
       "candidates": [
         {
           "ticker": "SPYM",
-          "return_lookback": 0.2364029868041564
+          "return_lookback": 0.23640285865345279
         },
         {
           "ticker": "IEFA",
@@ -25,11 +25,11 @@
       "candidates": [
         {
           "ticker": "LQD",
-          "return_lookback": 0.014591564279825109
+          "return_lookback": 0.01459149057107112
         },
         {
           "ticker": "HYG",
-          "return_lookback": 0.05112850348314746
+          "return_lookback": 0.05112839759824794
         }
       ],
       "selected_asset": "HYG",
@@ -45,7 +45,7 @@
         },
         {
           "ticker": "REM",
-          "return_lookback": 0.09850967293374602
+          "return_lookback": 0.0985095682660686
         }
       ],
       "selected_asset": "REET",
@@ -57,7 +57,7 @@
       "candidates": [
         {
           "ticker": "TLT",
-          "return_lookback": -0.01447096603390019
+          "return_lookback": -0.014470786957439752
         },
         {
           "ticker": "GLD",
@@ -69,7 +69,7 @@
     }
   ],
   "safe_asset": "BIL",
-  "safe_asset_return": 0.037989543636540946,
+  "safe_asset_return": 0.03798963349312334,
   "lookback_months": 12,
   "target_allocation": [
     {
@@ -114,29 +114,29 @@
   "rebalance_actions": [
     {
       "ticker": "GLD",
-      "action": "SELL",
-      "shares_delta": -0.5323,
+      "action": "HOLD",
+      "shares_delta": 0,
       "target_value": 3772.6,
       "current_value": 3984.7
     },
     {
       "ticker": "HYG",
       "action": "BUY",
-      "shares_delta": 47.3886,
+      "shares_delta": 47,
       "target_value": 3772.6,
       "current_value": 0.0
     },
     {
       "ticker": "IEFA",
       "action": "SELL",
-      "shares_delta": -1.6771,
+      "shares_delta": -1,
       "target_value": 3772.6,
       "current_value": 3942.12
     },
     {
       "ticker": "REET",
-      "action": "BUY",
-      "shares_delta": 0.6381,
+      "action": "HOLD",
+      "shares_delta": 0,
       "target_value": 3772.6,
       "current_value": 3754.59
     }
