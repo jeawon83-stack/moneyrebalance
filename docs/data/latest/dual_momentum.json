@@ -1,7 +1,7 @@
 {
   "as_of": "2026-08-10",
   "is_rebalance_day": false,
-  "usd_krw_rate": 1413.8800048828125,
+  "usd_krw_rate": 1415.3800048828125,
   "classes": [
     {
       "name": "주식",
@@ -13,7 +13,7 @@
         },
         {
           "ticker": "IEFA",
-          "return_lookback": 0.2558892984788381
+          "return_lookback": 0.2558894175283428
         }
       ],
       "selected_asset": "IEFA",
@@ -29,7 +29,7 @@
         },
         {
           "ticker": "HYG",
-          "return_lookback": 0.05112839759824794
+          "return_lookback": 0.05112850348314746
         }
       ],
       "selected_asset": "HYG",
@@ -57,7 +57,7 @@
       "candidates": [
         {
           "ticker": "TLT",
-          "return_lookback": -0.014471234648468667
+          "return_lookback": -0.01447096603390019
         },
         {
           "ticker": "GLD",
@@ -69,7 +69,7 @@
     }
   ],
   "safe_asset": "BIL",
-  "safe_asset_return": 0.03798963349312334,
+  "safe_asset_return": 0.037989543636540946,
   "lookback_months": 12,
   "target_allocation": [
     {
@@ -89,37 +89,56 @@
       "weight": 0.25
     }
   ],
-  "current_holdings_value": [],
-  "total_value": 0.0,
-  "cash": 0.0,
+  "current_holdings_value": [
+    {
+      "ticker": "IEFA",
+      "shares": 39,
+      "price": 101.08000183105469,
+      "value": 3942.12
+    },
+    {
+      "ticker": "GLD",
+      "shares": 10,
+      "price": 398.4700012207031,
+      "value": 3984.7
+    },
+    {
+      "ticker": "REET",
+      "shares": 133,
+      "price": 28.229999542236328,
+      "value": 3754.59
+    }
+  ],
+  "total_value": 15090.41,
+  "cash": 3409,
   "rebalance_actions": [
     {
       "ticker": "GLD",
-      "action": "HOLD",
-      "shares_delta": 0.0,
-      "target_value": 0.0,
-      "current_value": 0.0
+      "action": "SELL",
+      "shares_delta": -0.5323,
+      "target_value": 3772.6,
+      "current_value": 3984.7
     },
     {
       "ticker": "HYG",
-      "action": "HOLD",
-      "shares_delta": 0.0,
-      "target_value": 0.0,
+      "action": "BUY",
+      "shares_delta": 47.3886,
+      "target_value": 3772.6,
       "current_value": 0.0
     },
     {
       "ticker": "IEFA",
-      "action": "HOLD",
-      "shares_delta": 0.0,
-      "target_value": 0.0,
-      "current_value": 0.0
+      "action": "SELL",
+      "shares_delta": -1.6771,
+      "target_value": 3772.6,
+      "current_value": 3942.12
     },
     {
       "ticker": "REET",
-      "action": "HOLD",
-      "shares_delta": 0.0,
-      "target_value": 0.0,
-      "current_value": 0.0
+      "action": "BUY",
+      "shares_delta": 0.6381,
+      "target_value": 3772.6,
+      "current_value": 3754.59
     }
   ]
 }
