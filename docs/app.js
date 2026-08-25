@@ -575,8 +575,18 @@ Element.prototype.also = function (fn) {
 
 // ---------- dashboard ----------
 
-const DASHBOARD_LINE_COLORS = { dual_momentum: "var(--accent)", dividend: "#f59e0b" };
-const DASHBOARD_LABELS = { dual_momentum: "듀얼모멘텀", dividend: "배당주" };
+const DASHBOARD_STRATEGIES = [
+  { key: "dual_momentum", label: "듀얼모멘텀", color: "var(--accent)", autoBalance: true },
+  { key: "dividend", label: "배당주", color: "#f59e0b", autoBalance: true },
+  { key: "trend_following", label: "추세추종", color: "#8b5cf6", autoBalance: false },
+];
+
+function readOptionalNumber(id) {
+  const inputEl = document.getElementById(id);
+  if (!inputEl || inputEl.value === "") return undefined;
+  const v = parseFloat(inputEl.value);
+  return Number.isNaN(v) ? undefined : v;
+}
 
 async function loadYearHistoryMap(tab, year) {
   const map = {};
@@ -606,28 +616,38 @@ function computeMonthReturn(balance, prevBalance, contribution) {
   return (balance - prevBalance - (contribution || 0)) / prevBalance;
 }
 
+function defaultStrategyConfig(strategy) {
+  return strategy.autoBalance ? { carryover: 0, contributions: {} } : { carryover: 0, contributions: {}, balances: {} };
+}
+
 function ensureYearConfig(year) {
   if (!state.dashboardConfig[year]) {
-    state.dashboardConfig[year] = {
-      dual_momentum: { carryover: 0, contributions: {} },
-      dividend: { carryover: 0, contributions: {} },
-    };
+    state.dashboardConfig[year] = {};
   }
-  return state.dashboardConfig[year];
+  const yearCfg = state.dashboardConfig[year];
+  DASHBOARD_STRATEGIES.forEach((s) => {
+    if (!yearCfg[s.key]) yearCfg[s.key] = defaultStrategyConfig(s);
+  });
+  return yearCfg;
+}
+
+function balanceForMonth(strategy, m) {
+  if (strategy.autoBalance) return state.dashboardHistory[strategy.key][m];
+  return readOptionalNumber(`db-${strategy.key}-balance-${m}`);
 }
 
 function updateDashboardReturns() {
   const year = state.dashboardYear;
-  const yearCfg = ensureYearConfig(year);
-  ["dual_momentum", "dividend"].forEach((tab) => {
-    const carryoverInput = document.getElementById(`db-${tab}-carryover`);
+  ensureYearConfig(year);
+  DASHBOARD_STRATEGIES.forEach((s) => {
+    const carryoverInput = document.getElementById(`db-${s.key}-carryover`);
     const carryover = parseFloat(carryoverInput.value) || 0;
     let prevBalance = carryover;
     for (let m = 1; m <= 12; m++) {
-      const balance = state.dashboardHistory[tab][m];
-      const contribInput = document.getElementById(`db-${tab}-contrib-${m}`);
+      const balance = balanceForMonth(s, m);
+      const contribInput = document.getElementById(`db-${s.key}-contrib-${m}`);
       const contribution = parseFloat(contribInput.value) || 0;
-      const returnEl = document.getElementById(`db-${tab}-return-${m}`);
+      const returnEl = document.getElementById(`db-${s.key}-return-${m}`);
       const ret = computeMonthReturn(balance, prevBalance, contribution);
       returnEl.textContent = ret === null ? "-" : fmtPercent(ret);
       returnEl.style.color = ret === null ? "" : ret >= 0 ? "var(--positive)" : "var(--negative)";
@@ -637,16 +657,16 @@ function updateDashboardReturns() {
   renderDashboardChart();
 }
 
-function collectMonthReturns(tab) {
+function collectMonthReturns(strategy) {
   const yearCfg = ensureYearConfig(state.dashboardYear);
-  const carryoverInput = document.getElementById(`db-${tab}-carryover`);
-  const carryover = parseFloat(carryoverInput?.value) || yearCfg[tab].carryover || 0;
+  const carryoverInput = document.getElementById(`db-${strategy.key}-carryover`);
+  const carryover = parseFloat(carryoverInput?.value) || yearCfg[strategy.key].carryover || 0;
   let prevBalance = carryover;
   const returns = [];
   for (let m = 1; m <= 12; m++) {
-    const balance = state.dashboardHistory[tab][m];
-    const contribInput = document.getElementById(`db-${tab}-contrib-${m}`);
-    const contribution = parseFloat(contribInput?.value) || yearCfg[tab].contributions[m] || 0;
+    const balance = balanceForMonth(strategy, m);
+    const contribInput = document.getElementById(`db-${strategy.key}-contrib-${m}`);
+    const contribution = parseFloat(contribInput?.value) || yearCfg[strategy.key].contributions[m] || 0;
     returns.push(computeMonthReturn(balance, prevBalance, contribution));
     if (balance !== undefined) prevBalance = balance;
   }
@@ -654,12 +674,11 @@ function collectMonthReturns(tab) {
 }
 
 function renderDashboardChart() {
-  const dmReturns = collectMonthReturns("dual_momentum");
-  const dvReturns = collectMonthReturns("dividend");
-  document.getElementById("db-chart").innerHTML = buildReturnChartSVG(dmReturns, dvReturns);
+  const seriesList = DASHBOARD_STRATEGIES.map((s) => ({ label: s.label, color: s.color, values: collectMonthReturns(s) }));
+  document.getElementById("db-chart").innerHTML = buildReturnChartSVG(seriesList);
 }
 
-function buildReturnChartSVG(dmReturns, dvReturns) {
+function buildReturnChartSVG(seriesList) {
   const width = 640;
   const height = 220;
   const padL = 44;
@@ -669,7 +688,7 @@ function buildReturnChartSVG(dmReturns, dvReturns) {
   const plotW = width - padL - padR;
   const plotH = height - padT - padB;
 
-  const allValues = [...dmReturns, ...dvReturns].filter((v) => v !== null && v !== undefined);
+  const allValues = seriesList.flatMap((s) => s.values).filter((v) => v !== null && v !== undefined);
   if (allValues.length === 0) {
     return `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg"><text x="${width / 2}" y="${height / 2}" text-anchor="middle" fill="var(--text-muted)" font-size="13">아직 표시할 데이터가 없습니다.</text></svg>`;
   }
@@ -704,18 +723,27 @@ function buildReturnChartSVG(dmReturns, dvReturns) {
   const zeroY = yFor(0).toFixed(1);
   const monthLabels = Array.from({ length: 12 }, (_, i) => `<text x="${xFor(i).toFixed(1)}" y="${height - 8}" text-anchor="middle" font-size="10" fill="var(--text-muted)">${i + 1}월</text>`).join("");
 
+  const lines = seriesList
+    .map((s) => `<path d="${buildPath(s.values)}" fill="none" stroke="${s.color}" stroke-width="2" />${buildDots(s.values, s.color)}`)
+    .join("");
+
+  let legendX = 0;
+  const legend = seriesList
+    .map((s) => {
+      const item = `<circle cx="${legendX}" cy="0" r="3" fill="${s.color}" /><text x="${legendX + 8}" y="4" font-size="10" fill="var(--text)">${s.label}</text>`;
+      legendX += 20 + s.label.length * 11;
+      return item;
+    })
+    .join("");
+
   return `
     <svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
       <line x1="${padL}" y1="${zeroY}" x2="${width - padR}" y2="${zeroY}" stroke="var(--border)" stroke-width="1" stroke-dasharray="4 3" />
       <text x="${padL - 6}" y="${(parseFloat(zeroY) + 4).toFixed(1)}" text-anchor="end" font-size="10" fill="var(--text-muted)">0%</text>
       ${monthLabels}
-      <path d="${buildPath(dmReturns)}" fill="none" stroke="${DASHBOARD_LINE_COLORS.dual_momentum}" stroke-width="2" />
-      <path d="${buildPath(dvReturns)}" fill="none" stroke="${DASHBOARD_LINE_COLORS.dividend}" stroke-width="2" />
-      ${buildDots(dmReturns, DASHBOARD_LINE_COLORS.dual_momentum)}
-      ${buildDots(dvReturns, DASHBOARD_LINE_COLORS.dividend)}
+      ${lines}
       <g transform="translate(${padL},10)">
-        <circle cx="0" cy="0" r="3" fill="${DASHBOARD_LINE_COLORS.dual_momentum}" /><text x="8" y="4" font-size="10" fill="var(--text)">${DASHBOARD_LABELS.dual_momentum}</text>
-        <circle cx="80" cy="0" r="3" fill="${DASHBOARD_LINE_COLORS.dividend}" /><text x="88" y="4" font-size="10" fill="var(--text)">${DASHBOARD_LABELS.dividend}</text>
+        ${legend}
       </g>
     </svg>`;
 }
@@ -724,50 +752,59 @@ async function renderDashboardTable() {
   const year = state.dashboardYear;
   const yearCfg = ensureYearConfig(year);
 
-  const [dmHistory, dvHistory] = await Promise.all([loadYearHistoryMap("dual_momentum", year), loadYearHistoryMap("dividend", year)]);
-  state.dashboardHistory = { dual_momentum: dmHistory, dividend: dvHistory };
+  const autoStrategies = DASHBOARD_STRATEGIES.filter((s) => s.autoBalance);
+  const historyResults = await Promise.all(autoStrategies.map((s) => loadYearHistoryMap(s.key, year)));
+  state.dashboardHistory = {};
+  autoStrategies.forEach((s, i) => {
+    state.dashboardHistory[s.key] = historyResults[i];
+  });
 
   const tbody = document.getElementById("db-table-body");
   tbody.innerHTML = "";
 
-  const carryoverRow = el("tr", {}, [
-    el("td", { text: "이월금액" }),
-    el("td", {}, [el("input", { type: "number", id: "db-dual_momentum-carryover", value: String(yearCfg.dual_momentum.carryover || 0), step: "0.01" })]),
-    el("td", { text: "-" }),
-    el("td", { text: "-" }),
-    el("td", {}, [el("input", { type: "number", id: "db-dividend-carryover", value: String(yearCfg.dividend.carryover || 0), step: "0.01" })]),
-    el("td", { text: "-" }),
-    el("td", { text: "-" }),
-  ]);
-  tbody.appendChild(carryoverRow);
+  const carryoverCells = [el("td", { text: "이월금액" })];
+  DASHBOARD_STRATEGIES.forEach((s) => {
+    carryoverCells.push(
+      el("td", {}, [el("input", { type: "number", id: `db-${s.key}-carryover`, value: String(yearCfg[s.key].carryover || 0), step: "0.01" })])
+    );
+    carryoverCells.push(el("td", { text: "-" }));
+    carryoverCells.push(el("td", { text: "-" }));
+  });
+  tbody.appendChild(el("tr", {}, carryoverCells));
 
   for (let m = 1; m <= 12; m++) {
-    const dmBalance = dmHistory[m];
-    const dvBalance = dvHistory[m];
-    const row = el("tr", {}, [
-      el("td", { text: `${m}월` }),
-      el("td", { id: `db-dual_momentum-balance-${m}`, text: dmBalance !== undefined ? fmtMoney(dmBalance) : "-" }),
-      el("td", {}, [
-        el("input", {
-          type: "number",
-          id: `db-dual_momentum-contrib-${m}`,
-          value: String((yearCfg.dual_momentum.contributions || {})[m] || 0),
-          step: "0.01",
-        }),
-      ]),
-      el("td", { id: `db-dual_momentum-return-${m}`, text: "-" }),
-      el("td", { id: `db-dividend-balance-${m}`, text: dvBalance !== undefined ? fmtMoney(dvBalance) : "-" }),
-      el("td", {}, [
-        el("input", {
-          type: "number",
-          id: `db-dividend-contrib-${m}`,
-          value: String((yearCfg.dividend.contributions || {})[m] || 0),
-          step: "0.01",
-        }),
-      ]),
-      el("td", { id: `db-dividend-return-${m}`, text: "-" }),
-    ]);
-    tbody.appendChild(row);
+    const rowCells = [el("td", { text: `${m}월` })];
+    DASHBOARD_STRATEGIES.forEach((s) => {
+      if (s.autoBalance) {
+        const balance = state.dashboardHistory[s.key][m];
+        rowCells.push(el("td", { id: `db-${s.key}-balance-${m}`, text: balance !== undefined ? fmtMoney(balance) : "-" }));
+      } else {
+        const stored = (yearCfg[s.key].balances || {})[m];
+        rowCells.push(
+          el("td", {}, [
+            el("input", {
+              type: "number",
+              id: `db-${s.key}-balance-${m}`,
+              value: stored !== undefined ? String(stored) : "",
+              placeholder: "금액",
+              step: "0.01",
+            }),
+          ])
+        );
+      }
+      rowCells.push(
+        el("td", {}, [
+          el("input", {
+            type: "number",
+            id: `db-${s.key}-contrib-${m}`,
+            value: String((yearCfg[s.key].contributions || {})[m] || 0),
+            step: "0.01",
+          }),
+        ])
+      );
+      rowCells.push(el("td", { id: `db-${s.key}-return-${m}`, text: "-" }));
+    });
+    tbody.appendChild(el("tr", {}, rowCells));
   }
 
   tbody.addEventListener("input", updateDashboardReturns);
@@ -777,14 +814,23 @@ async function renderDashboardTable() {
 function collectDashboardFormIntoConfig() {
   const year = state.dashboardYear;
   const yearCfg = ensureYearConfig(year);
-  ["dual_momentum", "dividend"].forEach((tab) => {
-    yearCfg[tab].carryover = parseFloat(document.getElementById(`db-${tab}-carryover`).value) || 0;
+  DASHBOARD_STRATEGIES.forEach((s) => {
+    yearCfg[s.key].carryover = parseFloat(document.getElementById(`db-${s.key}-carryover`).value) || 0;
     const contributions = {};
     for (let m = 1; m <= 12; m++) {
-      const val = parseFloat(document.getElementById(`db-${tab}-contrib-${m}`).value) || 0;
+      const val = parseFloat(document.getElementById(`db-${s.key}-contrib-${m}`).value) || 0;
       if (val) contributions[m] = val;
     }
-    yearCfg[tab].contributions = contributions;
+    yearCfg[s.key].contributions = contributions;
+
+    if (!s.autoBalance) {
+      const balances = {};
+      for (let m = 1; m <= 12; m++) {
+        const v = readOptionalNumber(`db-${s.key}-balance-${m}`);
+        if (v !== undefined) balances[m] = v;
+      }
+      yearCfg[s.key].balances = balances;
+    }
   });
 }
 
