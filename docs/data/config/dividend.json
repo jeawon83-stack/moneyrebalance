@@ -15,19 +15,19 @@
   ],
   "holdings": [
     {
-      "ticker": "IDV",
-      "shares": 85,
-      "avg_cost": 35.6129
+      "ticker": "SCHD",
+      "shares": 114,
+      "avg_cost": 28.83
     },
     {
       "ticker": "SCHY",
-      "shares": 118,
-      "avg_cost": 27.937
+      "shares": 119,
+      "avg_cost": 27.98
     },
     {
-      "ticker": "SCHD",
-      "shares": 118,
-      "avg_cost": 28.8386
+      "ticker": "IDV",
+      "shares": 88,
+      "avg_cost": 35.93
     }
   ],
   "cash": 0,
