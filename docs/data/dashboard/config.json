@@ -1,7 +1,17 @@
 {
   "2026": {
-    "dual_momentum": { "carryover": 0, "contributions": {} },
-    "dividend": { "carryover": 0, "contributions": {} },
-    "trend_following": { "carryover": 0, "contributions": {}, "balances": {} }
+    "dual_momentum": {
+      "carryover": 0,
+      "contributions": {}
+    },
+    "dividend": {
+      "carryover": 0,
+      "contributions": {}
+    },
+    "trend_following": {
+      "carryover": 0,
+      "contributions": {},
+      "balances": {}
+    }
   }
 }
