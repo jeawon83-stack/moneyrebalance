@@ -11,7 +11,9 @@
     "trend_following": {
       "carryover": 0,
       "contributions": {},
-      "balances": {}
+      "balances": {
+        "8": 17452416
+      }
     }
   }
 }
