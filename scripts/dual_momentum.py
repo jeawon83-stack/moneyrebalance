@@ -11,10 +11,10 @@ import math
 
 from common import (
     DATA_DIR,
+    determine_rebalance_month,
     fetch_current_price,
     fetch_trailing_return,
     fetch_usd_krw_rate,
-    is_last_day_of_month,
     load_json,
     save_json,
     today_utc,
@@ -141,7 +141,8 @@ def main():
 
     config = load_json(CONFIG_PATH)
     today = today_utc()
-    is_rebalance_day = args.force_rebalance_day or is_last_day_of_month(today)
+    rebalance_month = today.strftime("%Y-%m") if args.force_rebalance_day else determine_rebalance_month(today, HISTORY_DIR)
+    is_rebalance_day = rebalance_month is not None
 
     signal_result = compute_signals(config)
     portfolio_result = compute_portfolio(config, signal_result["target_allocation"])
@@ -163,15 +164,14 @@ def main():
     print(f"Wrote {LATEST_PATH}")
 
     if is_rebalance_day:
-        month_key = today.strftime("%Y-%m")
-        history_path = HISTORY_DIR / f"{month_key}.json"
+        history_path = HISTORY_DIR / f"{rebalance_month}.json"
         save_json(history_path, result)
         print(f"Wrote {history_path}")
 
         index_path = HISTORY_DIR / "index.json"
         index = load_json(index_path) if index_path.exists() else {"months": []}
-        if month_key not in index["months"]:
-            index["months"].append(month_key)
+        if rebalance_month not in index["months"]:
+            index["months"].append(rebalance_month)
             index["months"].sort()
         save_json(index_path, index)
         print(f"Updated {index_path}")

@@ -32,6 +32,24 @@ def is_last_day_of_month(d: date) -> bool:
     return d.day == last_day
 
 
+def determine_rebalance_month(today: date, history_dir: Path, grace_days: int = 3) -> str | None:
+    """오늘이 이번 달 월말이면 이번 달을 반환한다.
+
+    GitHub Actions의 예약 실행(cron)은 부하가 많을 때 건너뛸 수 있어, 월말 당일에
+    실행이 누락될 수 있다. 이를 보정하기 위해 월말이 아니어도 이번 달 초
+    grace_days일 이내이면서 지난달 기록이 아직 없으면 지난달을 리밸런싱 대상으로
+    간주해 자동으로 보정 기록한다.
+    """
+    if is_last_day_of_month(today):
+        return today.strftime("%Y-%m")
+    if today.day <= grace_days:
+        prev_last_day = today.replace(day=1) - timedelta(days=1)
+        prev_key = prev_last_day.strftime("%Y-%m")
+        if not (history_dir / f"{prev_key}.json").exists():
+            return prev_key
+    return None
+
+
 def fetch_current_price(ticker: str) -> float:
     hist = yf.Ticker(ticker).history(period="5d", auto_adjust=True)
     if hist.empty:
