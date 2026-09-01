@@ -580,6 +580,8 @@ const DASHBOARD_STRATEGIES = [
   { key: "dividend", label: "배당주", color: "#f59e0b", autoBalance: true },
   { key: "trend_following", label: "추세추종", color: "#8b5cf6", autoBalance: false },
 ];
+const TOTAL_LABEL = "합계(원화환산)";
+const TOTAL_COLOR = "#10b981";
 
 function readOptionalNumber(id) {
   const inputEl = document.getElementById(id);
@@ -598,7 +600,7 @@ async function loadYearHistoryMap(tab, year) {
         try {
           const data = await fetchJSON(`data/history/${tab}/${m}.json`);
           const monthNum = parseInt(m.split("-")[1], 10);
-          map[monthNum] = data.total_value;
+          map[monthNum] = { total_value: data.total_value, usd_krw_rate: data.usd_krw_rate };
         } catch (e) {
           // 해당 월 기록을 못 읽으면 무시하고 넘어감
         }
@@ -632,8 +634,70 @@ function ensureYearConfig(year) {
 }
 
 function balanceForMonth(strategy, m) {
-  if (strategy.autoBalance) return state.dashboardHistory[strategy.key][m];
+  if (strategy.autoBalance) {
+    const entry = state.dashboardHistory[strategy.key][m];
+    return entry ? entry.total_value : undefined;
+  }
   return readOptionalNumber(`db-${strategy.key}-balance-${m}`);
+}
+
+function rateForMonth(strategy, m) {
+  if (!strategy.autoBalance) return undefined;
+  const entry = state.dashboardHistory[strategy.key][m];
+  return entry ? entry.usd_krw_rate : undefined;
+}
+
+function firstAvailableRate(strategy) {
+  for (let m = 1; m <= 12; m++) {
+    const rate = rateForMonth(strategy, m);
+    if (rate) return rate;
+  }
+  return undefined;
+}
+
+function krwBalanceForMonth(strategy, m) {
+  const balance = balanceForMonth(strategy, m);
+  if (balance === undefined) return undefined;
+  if (!strategy.autoBalance) return balance;
+  const rate = rateForMonth(strategy, m) || firstAvailableRate(strategy);
+  return rate ? balance * rate : undefined;
+}
+
+function krwContributionForMonth(strategy, m) {
+  const contribInput = document.getElementById(`db-${strategy.key}-contrib-${m}`);
+  const contribution = parseFloat(contribInput?.value) || 0;
+  if (!strategy.autoBalance) return contribution;
+  const rate = rateForMonth(strategy, m) || firstAvailableRate(strategy);
+  return rate ? contribution * rate : 0;
+}
+
+function combinedCarryoverKRW() {
+  let total = 0;
+  DASHBOARD_STRATEGIES.forEach((s) => {
+    const carryoverInput = document.getElementById(`db-${s.key}-carryover`);
+    const carryover = parseFloat(carryoverInput.value) || 0;
+    if (!s.autoBalance) {
+      total += carryover;
+    } else {
+      const rate = firstAvailableRate(s);
+      if (rate) total += carryover * rate;
+    }
+  });
+  return total;
+}
+
+function collectCombinedReturns() {
+  let prevBalance = combinedCarryoverKRW();
+  const returns = [];
+  for (let m = 1; m <= 12; m++) {
+    const parts = DASHBOARD_STRATEGIES.map((s) => krwBalanceForMonth(s, m));
+    const anyDefined = parts.some((v) => v !== undefined);
+    const balance = anyDefined ? parts.reduce((sum, v) => sum + (v || 0), 0) : undefined;
+    const contribution = DASHBOARD_STRATEGIES.reduce((sum, s) => sum + krwContributionForMonth(s, m), 0);
+    returns.push(computeMonthReturn(balance, prevBalance, contribution));
+    if (balance !== undefined) prevBalance = balance;
+  }
+  return returns;
 }
 
 function updateDashboardReturns() {
@@ -654,6 +718,25 @@ function updateDashboardReturns() {
       if (balance !== undefined) prevBalance = balance;
     }
   });
+
+  document.getElementById("db-total-carryover-display").textContent = fmtWon(combinedCarryoverKRW());
+  let prevTotalBalance = combinedCarryoverKRW();
+  for (let m = 1; m <= 12; m++) {
+    const parts = DASHBOARD_STRATEGIES.map((s) => krwBalanceForMonth(s, m));
+    const anyDefined = parts.some((v) => v !== undefined);
+    const totalBalance = anyDefined ? parts.reduce((sum, v) => sum + (v || 0), 0) : undefined;
+    const totalContribution = DASHBOARD_STRATEGIES.reduce((sum, s) => sum + krwContributionForMonth(s, m), 0);
+
+    document.getElementById(`db-total-balance-${m}`).textContent = totalBalance !== undefined ? fmtWon(totalBalance) : "-";
+    document.getElementById(`db-total-contrib-${m}`).textContent = fmtWon(totalContribution);
+
+    const returnEl = document.getElementById(`db-total-return-${m}`);
+    const ret = computeMonthReturn(totalBalance, prevTotalBalance, totalContribution);
+    returnEl.textContent = ret === null ? "-" : fmtPercent(ret);
+    returnEl.style.color = ret === null ? "" : ret >= 0 ? "var(--positive)" : "var(--negative)";
+    if (totalBalance !== undefined) prevTotalBalance = totalBalance;
+  }
+
   renderDashboardChart();
 }
 
@@ -675,6 +758,7 @@ function collectMonthReturns(strategy) {
 
 function renderDashboardChart() {
   const seriesList = DASHBOARD_STRATEGIES.map((s) => ({ label: s.label, color: s.color, values: collectMonthReturns(s) }));
+  seriesList.push({ label: TOTAL_LABEL, color: TOTAL_COLOR, values: collectCombinedReturns() });
   document.getElementById("db-chart").innerHTML = buildReturnChartSVG(seriesList);
 }
 
@@ -770,14 +854,17 @@ async function renderDashboardTable() {
     carryoverCells.push(el("td", { text: "-" }));
     carryoverCells.push(el("td", { text: "-" }));
   });
+  carryoverCells.push(el("td", { id: "db-total-carryover-display", text: "-" }));
+  carryoverCells.push(el("td", { text: "-" }));
+  carryoverCells.push(el("td", { text: "-" }));
   tbody.appendChild(el("tr", {}, carryoverCells));
 
   for (let m = 1; m <= 12; m++) {
     const rowCells = [el("td", { text: `${m}월` })];
     DASHBOARD_STRATEGIES.forEach((s) => {
       if (s.autoBalance) {
-        const balance = state.dashboardHistory[s.key][m];
-        rowCells.push(el("td", { id: `db-${s.key}-balance-${m}`, text: balance !== undefined ? fmtMoney(balance) : "-" }));
+        const entry = state.dashboardHistory[s.key][m];
+        rowCells.push(el("td", { id: `db-${s.key}-balance-${m}`, text: entry !== undefined ? fmtMoney(entry.total_value) : "-" }));
       } else {
         const stored = (yearCfg[s.key].balances || {})[m];
         rowCells.push(
@@ -804,6 +891,9 @@ async function renderDashboardTable() {
       );
       rowCells.push(el("td", { id: `db-${s.key}-return-${m}`, text: "-" }));
     });
+    rowCells.push(el("td", { id: `db-total-balance-${m}`, text: "-" }));
+    rowCells.push(el("td", { id: `db-total-contrib-${m}`, text: "-" }));
+    rowCells.push(el("td", { id: `db-total-return-${m}`, text: "-" }));
     tbody.appendChild(el("tr", {}, rowCells));
   }
 
