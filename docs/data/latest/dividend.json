@@ -1,7 +1,7 @@
 {
-  "as_of": "2026-09-04",
+  "as_of": "2026-09-07",
   "is_rebalance_day": false,
-  "usd_krw_rate": 1345.989990234375,
+  "usd_krw_rate": 1344.699951171875,
   "drift_threshold": 0.05,
   "holdings": [
     {
