@@ -1,7 +1,7 @@
 {
-  "as_of": "2026-09-08",
+  "as_of": "2026-09-09",
   "is_rebalance_day": false,
-  "usd_krw_rate": 1340.4200439453125,
+  "usd_krw_rate": 1339.449951171875,
   "classes": [
     {
       "name": "주식",
@@ -9,14 +9,14 @@
       "candidates": [
         {
           "ticker": "SPYM",
-          "return_lookback": 0.19748311721497447
+          "return_lookback": 0.18878316615955537
         },
         {
           "ticker": "IEFA",
-          "return_lookback": 0.21263629174143173
+          "return_lookback": 0.18741447151529012
         }
       ],
-      "selected_asset": "IEFA",
+      "selected_asset": "SPYM",
       "in_market": true
     },
     {
@@ -25,15 +25,15 @@
       "candidates": [
         {
           "ticker": "LQD",
-          "return_lookback": -0.00666149789150039
+          "return_lookback": -0.011729490145999666
         },
         {
           "ticker": "HYG",
-          "return_lookback": 0.0379107426648333
+          "return_lookback": 0.03607430862604355
         }
       ],
-      "selected_asset": "HYG",
-      "in_market": true
+      "selected_asset": "BIL",
+      "in_market": false
     },
     {
       "name": "부동산",
@@ -41,11 +41,11 @@
       "candidates": [
         {
           "ticker": "REET",
-          "return_lookback": 0.10785116253349836
+          "return_lookback": 0.0982054040077529
         },
         {
           "ticker": "REM",
-          "return_lookback": -0.0005956031794919214
+          "return_lookback": -0.005931854060729935
         }
       ],
       "selected_asset": "REET",
@@ -57,11 +57,11 @@
       "candidates": [
         {
           "ticker": "TLT",
-          "return_lookback": -0.02929008943425282
+          "return_lookback": -0.04753100376710406
         },
         {
           "ticker": "GLD",
-          "return_lookback": 0.2074309498862723
+          "return_lookback": 0.20467713183261682
         }
       ],
       "selected_asset": "GLD",
@@ -69,15 +69,15 @@
     }
   ],
   "safe_asset": "BIL",
-  "safe_asset_return": 0.03706356344077011,
+  "safe_asset_return": 0.03694999549334388,
   "lookback_months": 12,
   "target_allocation": [
     {
-      "ticker": "IEFA",
+      "ticker": "SPYM",
       "weight": 0.25
     },
     {
-      "ticker": "HYG",
+      "ticker": "BIL",
       "weight": 0.25
     },
     {
@@ -93,52 +93,59 @@
     {
       "ticker": "IEFA",
       "shares": 39,
-      "price": 100.48999786376953,
-      "value": 3919.11
+      "price": 99.41999816894531,
+      "value": 3877.38
     },
     {
       "ticker": "GLD",
       "shares": 10,
-      "price": 399.7200012207031,
-      "value": 3997.2
+      "price": 403.3500061035156,
+      "value": 4033.5
     },
     {
       "ticker": "REET",
       "shares": 133,
-      "price": 27.360000610351562,
-      "value": 3638.88
+      "price": 27.09000015258789,
+      "value": 3602.97
     }
   ],
-  "total_value": 14964.19,
+  "total_value": 14922.85,
   "cash": 3409,
   "rebalance_actions": [
+    {
+      "ticker": "BIL",
+      "action": "BUY",
+      "shares_delta": 40,
+      "target_value": 3730.71,
+      "current_value": 0.0
+    },
     {
       "ticker": "GLD",
       "action": "HOLD",
       "shares_delta": 0,
-      "target_value": 3741.05,
-      "current_value": 3997.2
-    },
-    {
-      "ticker": "HYG",
-      "action": "BUY",
-      "shares_delta": 47,
-      "target_value": 3741.05,
-      "current_value": 0.0
+      "target_value": 3730.71,
+      "current_value": 4033.5
     },
     {
       "ticker": "IEFA",
       "action": "SELL",
-      "shares_delta": -1,
-      "target_value": 3741.05,
-      "current_value": 3919.11
+      "shares_delta": -39,
+      "target_value": 0.0,
+      "current_value": 3877.38
     },
     {
       "ticker": "REET",
       "action": "BUY",
-      "shares_delta": 3,
-      "target_value": 3741.05,
-      "current_value": 3638.88
+      "shares_delta": 4,
+      "target_value": 3730.71,
+      "current_value": 3602.97
+    },
+    {
+      "ticker": "SPYM",
+      "action": "BUY",
+      "shares_delta": 41,
+      "target_value": 3730.71,
+      "current_value": 0.0
     }
   ]
 }
