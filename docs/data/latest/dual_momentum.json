@@ -1,7 +1,7 @@
 {
-  "as_of": "2026-09-25",
+  "as_of": "2026-09-29",
   "is_rebalance_day": false,
-  "usd_krw_rate": 1355.280029296875,
+  "usd_krw_rate": 1359.5799560546875,
   "classes": [
     {
       "name": "주식",
@@ -9,7 +9,7 @@
       "candidates": [
         {
           "ticker": "SPYM",
-          "return_lookback": 0.18041192736621192
+          "return_lookback": 0.18041181028927644
         },
         {
           "ticker": "IEFA",
@@ -25,7 +25,7 @@
       "candidates": [
         {
           "ticker": "LQD",
-          "return_lookback": -0.028825096509491166
+          "return_lookback": -0.028825166230420973
         },
         {
           "ticker": "HYG",
@@ -41,11 +41,11 @@
       "candidates": [
         {
           "ticker": "REET",
-          "return_lookback": 0.0695780422094785
+          "return_lookback": 0.0695781259393975
         },
         {
           "ticker": "REM",
-          "return_lookback": -0.053673452957632484
+          "return_lookback": -0.05367336258220279
         }
       ],
       "selected_asset": "REET",
