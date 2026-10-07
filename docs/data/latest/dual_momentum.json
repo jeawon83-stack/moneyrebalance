@@ -1,7 +1,7 @@
 {
-  "as_of": "2026-10-06",
+  "as_of": "2026-10-07",
   "is_rebalance_day": false,
-  "usd_krw_rate": 1344.1099853515625,
+  "usd_krw_rate": 1338.780029296875,
   "classes": [
     {
       "name": "주식",
@@ -9,7 +9,7 @@
       "candidates": [
         {
           "ticker": "SPYM",
-          "return_lookback": 0.1712747622872346
+          "return_lookback": 0.1776948168071495
         },
         {
           "ticker": "IEFA",
@@ -25,11 +25,11 @@
       "candidates": [
         {
           "ticker": "LQD",
-          "return_lookback": -0.043673748883950925
+          "return_lookback": -0.04076236916761522
         },
         {
           "ticker": "HYG",
-          "return_lookback": 0.009945385460258915
+          "return_lookback": 0.013750178793763501
         }
       ],
       "selected_asset": "BIL",
@@ -45,7 +45,7 @@
         },
         {
           "ticker": "REM",
-          "return_lookback": -0.13728793830524544
+          "return_lookback": -0.13287633515132224
         }
       ],
       "selected_asset": "BIL",
@@ -57,11 +57,11 @@
       "candidates": [
         {
           "ticker": "TLT",
-          "return_lookback": -0.09726108322289095
+          "return_lookback": -0.09527080708671087
         },
         {
           "ticker": "GLD",
-          "return_lookback": 0.06126264469055265
+          "return_lookback": 0.06886806105699828
         }
       ],
       "selected_asset": "GLD",
@@ -69,7 +69,7 @@
     }
   ],
   "safe_asset": "BIL",
-  "safe_asset_return": 0.03674937525880395,
+  "safe_asset_return": 0.03686278295551726,
   "lookback_months": 12,
   "target_allocation": [
     {
@@ -95,8 +95,8 @@
     {
       "ticker": "GLD",
       "shares": 10,
-      "price": 379.54998779296875,
-      "value": 3795.5
+      "price": 382.2699890136719,
+      "value": 3822.7
     },
     {
       "ticker": "REET",
@@ -105,22 +105,22 @@
       "value": 3395.49
     }
   ],
-  "total_value": 14387.67,
+  "total_value": 14414.87,
   "cash": 3409,
   "rebalance_actions": [
     {
       "ticker": "BIL",
       "action": "BUY",
       "shares_delta": 78,
-      "target_value": 7193.84,
+      "target_value": 7207.44,
       "current_value": 0.0
     },
     {
       "ticker": "GLD",
       "action": "HOLD",
       "shares_delta": 0,
-      "target_value": 3596.92,
-      "current_value": 3795.5
+      "target_value": 3603.72,
+      "current_value": 3822.7
     },
     {
       "ticker": "IEFA",
@@ -140,7 +140,7 @@
       "ticker": "SPYM",
       "action": "BUY",
       "shares_delta": 39,
-      "target_value": 3596.92,
+      "target_value": 3603.72,
       "current_value": 0.0
     }
   ]
