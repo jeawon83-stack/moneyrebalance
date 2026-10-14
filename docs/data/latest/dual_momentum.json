@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-10-13",
+  "as_of": "2026-10-14",
   "is_rebalance_day": false,
   "usd_krw_rate": 1338.47998046875,
   "classes": [
@@ -25,7 +25,7 @@
       "candidates": [
         {
           "ticker": "LQD",
-          "return_lookback": -0.03489978699465068
+          "return_lookback": -0.03489971772033795
         },
         {
           "ticker": "HYG",
@@ -57,7 +57,7 @@
       "candidates": [
         {
           "ticker": "TLT",
-          "return_lookback": -0.09875943610940474
+          "return_lookback": -0.0987595949013722
         },
         {
           "ticker": "GLD",
@@ -69,7 +69,7 @@
     }
   ],
   "safe_asset": "BIL",
-  "safe_asset_return": 0.03652315021558716,
+  "safe_asset_return": 0.036523329382191605,
   "lookback_months": 12,
   "target_allocation": [
     {
