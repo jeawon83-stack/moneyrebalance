@@ -1,7 +1,7 @@
 {
-  "as_of": "2026-10-16",
+  "as_of": "2026-10-20",
   "is_rebalance_day": false,
-  "usd_krw_rate": 1334.199951171875,
+  "usd_krw_rate": 1326.0799560546875,
   "classes": [
     {
       "name": "주식",
@@ -9,7 +9,7 @@
       "candidates": [
         {
           "ticker": "SPYM",
-          "return_lookback": 0.16065071842026413
+          "return_lookback": 0.16065083283232195
         },
         {
           "ticker": "IEFA",
@@ -29,7 +29,7 @@
         },
         {
           "ticker": "HYG",
-          "return_lookback": 0.00887035734793784
+          "return_lookback": 0.008870458380288326
         }
       ],
       "selected_asset": "BIL",
@@ -57,7 +57,7 @@
       "candidates": [
         {
           "ticker": "TLT",
-          "return_lookback": -0.07607329516980965
+          "return_lookback": -0.07607345788709119
         },
         {
           "ticker": "GLD",
@@ -69,7 +69,7 @@
     }
   ],
   "safe_asset": "BIL",
-  "safe_asset_return": 0.03708988344529929,
+  "safe_asset_return": 0.03708961460721061,
   "lookback_months": 12,
   "target_allocation": [
     {
