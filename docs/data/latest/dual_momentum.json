@@ -1,7 +1,7 @@
 {
-  "as_of": "2026-10-23",
+  "as_of": "2026-10-27",
   "is_rebalance_day": false,
-  "usd_krw_rate": 1323.6600341796875,
+  "usd_krw_rate": 1323.5799560546875,
   "classes": [
     {
       "name": "주식",
@@ -25,11 +25,11 @@
       "candidates": [
         {
           "ticker": "LQD",
-          "return_lookback": -0.0343980556621406
+          "return_lookback": -0.03439812416044352
         },
         {
           "ticker": "HYG",
-          "return_lookback": 0.012868693313777602
+          "return_lookback": 0.012868591730162082
         }
       ],
       "selected_asset": "BIL",
