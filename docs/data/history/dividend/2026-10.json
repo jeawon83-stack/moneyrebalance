@@ -1,0 +1,92 @@
+{
+  "as_of": "2026-10-31",
+  "is_rebalance_day": true,
+  "usd_krw_rate": 1337.97998046875,
+  "drift_threshold": 0.05,
+  "holdings": [
+    {
+      "ticker": "IDV",
+      "shares": 88,
+      "price": 42.71,
+      "value": 3758.48,
+      "avg_cost": 35.93,
+      "price_return": 0.1887,
+      "trailing_dividend": 2.425,
+      "dividend_yield": 0.0568,
+      "current_weight": 0.3203,
+      "target_weight": 0.33299999999999996
+    },
+    {
+      "ticker": "SCHD",
+      "shares": 114,
+      "price": 35.61,
+      "value": 4059.54,
+      "avg_cost": 28.83,
+      "price_return": 0.2352,
+      "trailing_dividend": 1.055,
+      "dividend_yield": 0.0296,
+      "current_weight": 0.346,
+      "target_weight": 0.33399999999999996
+    },
+    {
+      "ticker": "SCHY",
+      "shares": 119,
+      "price": 32.9,
+      "value": 3915.1,
+      "avg_cost": 27.98,
+      "price_return": 0.1758,
+      "trailing_dividend": 1.175,
+      "dividend_yield": 0.0357,
+      "current_weight": 0.3337,
+      "target_weight": 0.33299999999999996
+    }
+  ],
+  "total_value": 11733.12,
+  "cash": 0,
+  "target_vs_current": [
+    {
+      "ticker": "IDV",
+      "target_weight": 0.33299999999999996,
+      "current_weight": 0.3203,
+      "drift": -0.0127,
+      "needs_rebalance": false
+    },
+    {
+      "ticker": "SCHD",
+      "target_weight": 0.33399999999999996,
+      "current_weight": 0.346,
+      "drift": 0.012,
+      "needs_rebalance": false
+    },
+    {
+      "ticker": "SCHY",
+      "target_weight": 0.33299999999999996,
+      "current_weight": 0.3337,
+      "drift": 0.0007,
+      "needs_rebalance": false
+    }
+  ],
+  "rebalance_actions": [
+    {
+      "ticker": "IDV",
+      "action": "BUY",
+      "shares_delta": 3,
+      "target_value": 3907.13,
+      "current_value": 3758.48
+    },
+    {
+      "ticker": "SCHD",
+      "action": "SELL",
+      "shares_delta": -3,
+      "target_value": 3918.86,
+      "current_value": 4059.54
+    },
+    {
+      "ticker": "SCHY",
+      "action": "HOLD",
+      "shares_delta": 0,
+      "target_value": 3907.13,
+      "current_value": 3915.1
+    }
+  ]
+}
