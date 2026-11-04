@@ -1,7 +1,7 @@
 {
-  "as_of": "2026-11-03",
+  "as_of": "2026-11-04",
   "is_rebalance_day": false,
-  "usd_krw_rate": 1339.280029296875,
+  "usd_krw_rate": 1341.97998046875,
   "classes": [
     {
       "name": "주식",
@@ -25,11 +25,11 @@
       "candidates": [
         {
           "ticker": "LQD",
-          "return_lookback": -0.023215793039674137
+          "return_lookback": -0.027412510801080425
         },
         {
           "ticker": "HYG",
-          "return_lookback": 0.009264123662651613
+          "return_lookback": 0.0047935971579791126
         }
       ],
       "selected_asset": "BIL",
@@ -57,7 +57,7 @@
       "candidates": [
         {
           "ticker": "TLT",
-          "return_lookback": -0.05281730863090228
+          "return_lookback": -0.05661682528251044
         },
         {
           "ticker": "GLD",
@@ -69,7 +69,7 @@
     }
   ],
   "safe_asset": "BIL",
-  "safe_asset_return": 0.033359598651222955,
+  "safe_asset_return": 0.030393768355134743,
   "lookback_months": 12,
   "target_allocation": [
     {
