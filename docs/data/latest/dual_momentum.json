@@ -1,7 +1,7 @@
 {
-  "as_of": "2026-11-06",
+  "as_of": "2026-11-07",
   "is_rebalance_day": false,
-  "usd_krw_rate": 1356.47998046875,
+  "usd_krw_rate": 1356.3399658203125,
   "classes": [
     {
       "name": "주식",
@@ -9,11 +9,11 @@
       "candidates": [
         {
           "ticker": "SPYM",
-          "return_lookback": 0.13489099269076066
+          "return_lookback": 0.09777516918595097
         },
         {
           "ticker": "IEFA",
-          "return_lookback": 0.15803093747426322
+          "return_lookback": 0.11920394156113212
         }
       ],
       "selected_asset": "IEFA",
@@ -25,11 +25,11 @@
       "candidates": [
         {
           "ticker": "LQD",
-          "return_lookback": -0.017361682797273792
+          "return_lookback": -0.015476138208019963
         },
         {
           "ticker": "HYG",
-          "return_lookback": 0.016186656609513017
+          "return_lookback": 0.011249558195427278
         }
       ],
       "selected_asset": "BIL",
@@ -41,11 +41,11 @@
       "candidates": [
         {
           "ticker": "REET",
-          "return_lookback": 0.1266991893154732
+          "return_lookback": 0.10786128394047667
         },
         {
           "ticker": "REM",
-          "return_lookback": -0.10865711631444686
+          "return_lookback": -0.15196452335165778
         }
       ],
       "selected_asset": "REET",
@@ -57,11 +57,11 @@
       "candidates": [
         {
           "ticker": "TLT",
-          "return_lookback": -0.053904450100926815
+          "return_lookback": -0.04374144815565151
         },
         {
           "ticker": "GLD",
-          "return_lookback": 0.010060175354841938
+          "return_lookback": 0.016397858415627242
         }
       ],
       "selected_asset": "BIL",
@@ -69,7 +69,7 @@
     }
   ],
   "safe_asset": "BIL",
-  "safe_asset_return": 0.030360131554780123,
+  "safe_asset_return": 0.03058569970779068,
   "lookback_months": 12,
   "target_allocation": [
     {
@@ -89,30 +89,30 @@
     {
       "ticker": "IEFA",
       "shares": 39,
-      "price": 98.4800033569336,
-      "value": 3840.72
+      "price": 94.80000305175781,
+      "value": 3697.2
     },
     {
       "ticker": "GLD",
       "shares": 10,
-      "price": 372.489990234375,
-      "value": 3724.9
+      "price": 372.5199890136719,
+      "value": 3725.2
     },
     {
       "ticker": "REET",
       "shares": 133,
-      "price": 27.43000030517578,
-      "value": 3648.19
+      "price": 26.950000762939453,
+      "value": 3584.35
     }
   ],
-  "total_value": 14622.81,
+  "total_value": 14415.75,
   "cash": 3409,
   "rebalance_actions": [
     {
       "ticker": "BIL",
       "action": "BUY",
-      "shares_delta": 79,
-      "target_value": 7311.41,
+      "shares_delta": 78,
+      "target_value": 7207.88,
       "current_value": 0.0
     },
     {
@@ -120,21 +120,21 @@
       "action": "SELL",
       "shares_delta": -10,
       "target_value": 0.0,
-      "current_value": 3724.9
+      "current_value": 3725.2
     },
     {
       "ticker": "IEFA",
-      "action": "SELL",
-      "shares_delta": -1,
-      "target_value": 3655.7,
-      "current_value": 3840.72
+      "action": "HOLD",
+      "shares_delta": 0,
+      "target_value": 3603.94,
+      "current_value": 3697.2
     },
     {
       "ticker": "REET",
       "action": "HOLD",
       "shares_delta": 0,
-      "target_value": 3655.7,
-      "current_value": 3648.19
+      "target_value": 3603.94,
+      "current_value": 3584.35
     }
   ]
 }
