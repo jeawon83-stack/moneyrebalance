@@ -1,68 +1,68 @@
 {
-  "as_of": "2026-11-13",
+  "as_of": "2026-11-14",
   "is_rebalance_day": false,
-  "usd_krw_rate": 1331.3800048828125,
+  "usd_krw_rate": 1333.780029296875,
   "drift_threshold": 0.05,
   "holdings": [
     {
       "ticker": "IDV",
       "shares": 88,
-      "price": 42.78,
-      "value": 3764.64,
+      "price": 42.74,
+      "value": 3761.12,
       "avg_cost": 35.93,
-      "price_return": 0.1906,
+      "price_return": 0.1895,
       "trailing_dividend": 2.425,
       "dividend_yield": 0.0567,
-      "current_weight": 0.3183,
+      "current_weight": 0.3181,
       "target_weight": 0.33299999999999996
     },
     {
       "ticker": "SCHD",
       "shares": 114,
-      "price": 36.02,
-      "value": 4106.28,
+      "price": 35.93,
+      "value": 4096.02,
       "avg_cost": 28.83,
-      "price_return": 0.2494,
+      "price_return": 0.2463,
       "trailing_dividend": 1.055,
-      "dividend_yield": 0.0293,
-      "current_weight": 0.3471,
+      "dividend_yield": 0.0294,
+      "current_weight": 0.3464,
       "target_weight": 0.33399999999999996
     },
     {
       "ticker": "SCHY",
       "shares": 119,
-      "price": 33.26,
-      "value": 3957.94,
+      "price": 33.34,
+      "value": 3967.46,
       "avg_cost": 27.98,
-      "price_return": 0.1887,
+      "price_return": 0.1916,
       "trailing_dividend": 1.175,
-      "dividend_yield": 0.0353,
-      "current_weight": 0.3346,
+      "dividend_yield": 0.0352,
+      "current_weight": 0.3355,
       "target_weight": 0.33299999999999996
     }
   ],
-  "total_value": 11828.86,
+  "total_value": 11824.6,
   "cash": 0,
   "target_vs_current": [
     {
       "ticker": "IDV",
       "target_weight": 0.33299999999999996,
-      "current_weight": 0.3183,
-      "drift": -0.0147,
+      "current_weight": 0.3181,
+      "drift": -0.0149,
       "needs_rebalance": false
     },
     {
       "ticker": "SCHD",
       "target_weight": 0.33399999999999996,
-      "current_weight": 0.3471,
-      "drift": 0.0131,
+      "current_weight": 0.3464,
+      "drift": 0.0124,
       "needs_rebalance": false
     },
     {
       "ticker": "SCHY",
       "target_weight": 0.33299999999999996,
-      "current_weight": 0.3346,
-      "drift": 0.0016,
+      "current_weight": 0.3355,
+      "drift": 0.0025,
       "needs_rebalance": false
     }
   ],
@@ -71,22 +71,22 @@
       "ticker": "IDV",
       "action": "BUY",
       "shares_delta": 4,
-      "target_value": 3939.01,
-      "current_value": 3764.64
+      "target_value": 3937.59,
+      "current_value": 3761.12
     },
     {
       "ticker": "SCHD",
       "action": "SELL",
       "shares_delta": -4,
-      "target_value": 3950.84,
-      "current_value": 4106.28
+      "target_value": 3949.42,
+      "current_value": 4096.02
     },
     {
       "ticker": "SCHY",
       "action": "HOLD",
       "shares_delta": 0,
-      "target_value": 3939.01,
-      "current_value": 3957.94
+      "target_value": 3937.59,
+      "current_value": 3967.46
     }
   ]
 }
